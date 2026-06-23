@@ -548,8 +548,10 @@
     /* ================================================================ */
 
     /* ---------------- shared lists ---------------- */
-    /* Names are entered as free text (no preset roster). */
     const MODE = ["Trainee observed", "Trainee drove (with supervision)"];
+    /* name rosters — option pickers (mirrors v1); edit these lists to update the dropdowns */
+    const TRAINEES = ["Allison", "Lindsey", "Janessa"];
+    const SENIOR_AGENTS = ["Adel", "Alvin", "Cel", "Claire", "Ely", "Fred", "Kennedy", "Madison", "Menjie", "Migz", "Nathan", "Reena", "Sherry", "Tina"];
     /* 1-5 scale anchors */
     const QUAL = ["Not at all", "A little", "Somewhat", "Mostly", "Completely"];
     const QUAL_SR = ["Major concern", "Below bar", "Developing", "Solid", "Excellent"];
@@ -566,15 +568,15 @@
       return [
         { id: "date", label: "What's today's date?", type: "date", req: true, help: "Defaults to today — change it if you're logging an earlier day." },
         { id: "training_day", label: "Which training day is this?", type: "day", req: true, help: "Pick the day of your program (your start date may differ from the calendar week). This chooses today's questions." },
-        { id: "trainee_name", label: "Who's filling this out?", type: "text", req: true, help: "Type your full name." },
+        { id: "trainee_name", label: "Who's filling this out?", type: "single", options: TRAINEES, req: true, help: "Select your name." },
       ];
     }
     function metaSenior() {
       return [
         { id: "date", label: "What's today's date?", type: "date", req: true, help: "Defaults to today — change it if you're logging an earlier day." },
         { id: "training_day", label: "Which training day is this?", type: "day", req: true, help: "Pick the trainee's program day (shadow feedback runs Days 6–20). This chooses today's questions." },
-        { id: "trainee_name", label: "Which trainee are you reporting on?", type: "text", req: true, help: "Type the trainee's name." },
-        { id: "senior_agent_name", label: "Which senior agent are you (reporting in)?", type: "text", req: true, help: "Type your name." },
+        { id: "trainee_name", label: "Which trainee are you reporting on?", type: "single", options: TRAINEES, req: true, help: "Select the trainee." },
+        { id: "senior_agent_name", label: "Which senior agent are you (reporting in)?", type: "single", options: SENIOR_AGENTS, req: true, help: "Select your name." },
         { id: "mode", label: "What was the mode today?", type: "single", options: MODE, req: true },
       ];
     }
