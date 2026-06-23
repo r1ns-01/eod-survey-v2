@@ -1,4 +1,4 @@
-# EOD Check-in · CX Shadowing
+# Lola Blankets Daily EOD Check-in · Learner and Senior Agent POV
 
 A single-page End-of-Day check-in form for the Lola Blankets 2026 CX training
 program. Two roles — **Trainee** and **Senior Agent** — each get the exact
