@@ -1,0 +1,1215 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EOD Check-in · CX Shadowing</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <style>
+    :root {
+      --bg1: #fef6f0;
+      --bg2: #eef4ff;
+      --card: #ffffff;
+      --ink: #23262f;
+      --muted: #6b7280;
+      --line: #e7e9f0;
+      --brand: #6d5cf0;
+      --brand2: #ff7a59;
+      --good: #16a34a;
+      --shadow: 0 18px 50px rgba(40, 40, 90, .12);
+      --radius: 22px;
+      --trainee: #548235;
+      --senior: #9a4a16;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      background: radial-gradient(1200px 600px at 10% -10%, var(--bg1), transparent),
+        radial-gradient(1000px 700px at 110% 10%, var(--bg2), transparent),
+        linear-gradient(180deg, #fbfaff, #f4f1ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 680px
+    }
+
+    .shell {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid var(--line)
+    }
+
+    /* progress */
+    .bar {
+      height: 6px;
+      background: #eceaf6
+    }
+
+    .bar>i {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--brand), var(--brand2));
+      transition: width .45s cubic-bezier(.4, 0, .2, 1)
+    }
+
+    .pad {
+      padding: 34px 38px 30px
+    }
+
+    .kicker {
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+      margin: 0 0 6px
+    }
+
+    .step-i {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600
+    }
+
+    h1 {
+      font-size: 27px;
+      line-height: 1.2;
+      margin: 6px 0 2px;
+      letter-spacing: -.01em
+    }
+
+    .q {
+      font-size: 24px;
+      line-height: 1.28;
+      margin: 10px 0 4px;
+      letter-spacing: -.01em
+    }
+
+    .help {
+      color: var(--muted);
+      font-size: 15px;
+      margin: 6px 0 0
+    }
+
+    .screen {
+      animation: rise .42s cubic-bezier(.2, .7, .2, 1)
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(14px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    /* role cards */
+    .roles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 22px
+    }
+
+    .role {
+      cursor: pointer;
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      padding: 24px 18px;
+      text-align: center;
+      transition: .18s;
+      background: #fff
+    }
+
+    .role:hover {
+      transform: translateY(-3px);
+      border-color: var(--brand);
+      box-shadow: 0 12px 26px rgba(109, 92, 240, .16)
+    }
+
+    .role .emo {
+      font-size: 42px
+    }
+
+    .role h3 {
+      margin: 10px 0 4px;
+      font-size: 18px
+    }
+
+    .role p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.4
+    }
+
+    .role.trainee:hover {
+      border-color: var(--trainee)
+    }
+
+    .role.senior:hover {
+      border-color: var(--senior)
+    }
+
+    /* scale */
+    .scale {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-top: 24px
+    }
+
+    .opt {
+      cursor: pointer;
+      border: 2px solid var(--line);
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px 6px 12px;
+      text-align: center;
+      transition: .16s;
+      user-select: none
+    }
+
+    .opt .emo {
+      font-size: 30px;
+      display: block;
+      line-height: 1;
+      transition: transform .16s
+    }
+
+    .opt .n {
+      font-weight: 800;
+      font-size: 15px;
+      margin-top: 8px
+    }
+
+    .opt .lab {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+      min-height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .opt:hover {
+      transform: translateY(-3px);
+      border-color: var(--brand)
+    }
+
+    .opt:hover .emo {
+      transform: scale(1.18)
+    }
+
+    .opt.sel {
+      border-color: var(--brand);
+      background: linear-gradient(180deg, #fff, #f4f1ff);
+      box-shadow: 0 10px 22px rgba(109, 92, 240, .18)
+    }
+
+    .anchor {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 12px
+    }
+
+    /* chips */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px
+    }
+
+    .chip {
+      cursor: pointer;
+      border: 2px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 11px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: .15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .chip:hover {
+      border-color: var(--brand);
+      transform: translateY(-2px)
+    }
+
+    .chip.sel {
+      border-color: var(--brand);
+      background: var(--brand);
+      color: #fff
+    }
+
+    .chip .tick {
+      opacity: 0;
+      transition: .15s
+    }
+
+    .chip.sel .tick {
+      opacity: 1
+    }
+
+    /* inputs */
+    input[type=date],
+    textarea,
+    input[type=text] {
+      width: 100%;
+      margin-top: 20px;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      padding: 15px 16px;
+      font-size: 16px;
+      font-family: inherit;
+      color: var(--ink);
+      background: #fff;
+      transition: .15s
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+      line-height: 1.5
+    }
+
+    .note {
+      min-height: 86px
+    }
+
+    select.daysel {
+      width: 100%;
+      margin-top: 20px;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      padding: 15px 16px;
+      font-size: 16px;
+      font-family: inherit;
+      color: var(--ink);
+      background: #fff;
+      transition: .15s;
+      cursor: pointer
+    }
+
+    select.daysel:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px rgba(109, 92, 240, .14)
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px rgba(109, 92, 240, .14)
+    }
+
+    .counter {
+      text-align: right;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px
+    }
+
+    .notelab {
+      margin-top: 18px;
+      font-size: 13.5px;
+      color: var(--muted);
+      font-weight: 600
+    }
+
+    /* footer nav */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 38px 30px
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 700;
+      border-radius: 14px;
+      padding: 14px 26px;
+      font-size: 15.5px;
+      transition: .16s
+    }
+
+    .btn.primary {
+      background: linear-gradient(90deg, var(--brand), #7d6bff);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(109, 92, 240, .28)
+    }
+
+    .btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px rgba(109, 92, 240, .34)
+    }
+
+    .btn.primary:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--muted)
+    }
+
+    .btn.ghost:hover {
+      color: var(--ink)
+    }
+
+    .hint {
+      font-size: 12.5px;
+      color: var(--muted)
+    }
+
+    .req {
+      color: var(--brand2);
+      font-weight: 700
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 999px;
+      margin-bottom: 4px
+    }
+
+    .badge.trainee {
+      background: #eaf3e2;
+      color: var(--trainee)
+    }
+
+    .badge.senior {
+      background: #f7e7da;
+      color: var(--senior)
+    }
+
+    /* done */
+    .done {
+      text-align: center;
+      padding: 46px 38px 40px
+    }
+
+    .done .big {
+      font-size: 64px
+    }
+
+    .done h1 {
+      margin: 8px 0
+    }
+
+    .summary {
+      text-align: left;
+      background: #faf9ff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin: 20px 0;
+      max-height: 230px;
+      overflow: auto;
+      font-size: 13.5px
+    }
+
+    .summary div {
+      padding: 5px 0;
+      border-bottom: 1px dashed var(--line)
+    }
+
+    .summary b {
+      color: var(--muted);
+      font-weight: 600
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap
+    }
+
+    .notice {
+      margin-top: 22px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      border-radius: 16px;
+      padding: 18px 20px;
+      font-size: 15px;
+      line-height: 1.5
+    }
+
+    canvas#cf {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50
+    }
+
+    .kbd {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 14px
+    }
+
+    .kbd b {
+      background: #eee;
+      border-radius: 5px;
+      padding: 1px 6px;
+      font-family: monospace
+    }
+
+    @media(max-width:560px) {
+      .pad {
+        padding: 26px 22px 22px
+      }
+
+      .nav {
+        padding: 14px 22px 24px
+      }
+
+      .q {
+        font-size: 21px
+      }
+
+      .scale {
+        gap: 7px
+      }
+
+      .opt .lab {
+        display: none
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="cf"></canvas>
+  <div class="app">
+    <div class="shell">
+      <div class="bar"><i id="prog"></i></div>
+      <div id="view"></div>
+      <div class="nav" id="nav"></div>
+    </div>
+  </div>
+  <script>
+    /* ============================ CONFIG ============================
+       SHEET_ENDPOINT — paste your deployed Google Apps Script "Web app URL"
+       between the quotes to sync every submission to the Google Sheet.
+       Leave blank to skip syncing (responses still download/copy as JSON
+       and save locally). See README + EOD_AppsScript.gs.
+
+       NOTE: the training day is chosen by the person filling out the form
+       (date + an explicit "which training day" picker), so new hires can
+       start any weekday — there's no fixed cohort start date to configure. */
+    const SHEET_ENDPOINT = "";
+    /* ================================================================ */
+
+    /* ---------------- shared lists ---------------- */
+    /* Names are entered as free text (no preset roster). */
+    const MODE = ["Trainee observed", "Trainee drove (with supervision)"];
+    /* 1-5 scale anchors */
+    const QUAL = ["Not at all", "A little", "Somewhat", "Mostly", "Completely"];
+    const QUAL_SR = ["Major concern", "Below bar", "Developing", "Solid", "Excellent"];
+    const EMO = ["😣", "🙁", "😐", "🙂", "😄"];
+    const FLAG3 = ["On track", "Needs more practice", "Not yet"];
+    const FLAG3_RISK = ["On track", "Needs more practice", "At risk"];
+    const GRAD = ["Pass", "Pass with Conditions", "Not Yet"];
+
+    /* ---------------- meta header fields ----------------
+       The training day is asked explicitly (date + a "which training day"
+       picker) so a new hire can start on any weekday. The picked day — not
+       the calendar date — selects the question set. */
+    function metaTrainee() {
+      return [
+        { id: "date", label: "What's today's date?", type: "date", req: true, help: "Defaults to today — change it if you're logging an earlier day." },
+        { id: "training_day", label: "Which training day is this?", type: "day", req: true, help: "Pick the day of your program (your start date may differ from the calendar week). This chooses today's questions." },
+        { id: "trainee_name", label: "Who's filling this out?", type: "text", req: true, help: "Type your full name." },
+      ];
+    }
+    function metaSenior() {
+      return [
+        { id: "date", label: "What's today's date?", type: "date", req: true, help: "Defaults to today — change it if you're logging an earlier day." },
+        { id: "training_day", label: "Which training day is this?", type: "day", req: true, help: "Pick the trainee's program day (shadow feedback runs Days 6–20). This chooses today's questions." },
+        { id: "trainee_name", label: "Which trainee are you reporting on?", type: "text", req: true, help: "Type the trainee's name." },
+        { id: "senior_agent_name", label: "Which senior agent are you (reporting in)?", type: "text", req: true, help: "Type your name." },
+        { id: "mode", label: "What was the mode today?", type: "single", options: MODE, req: true },
+      ];
+    }
+
+    /* ordered day options for the picker */
+    function dayOptions() {
+      if (role === "trainee") return TRAINEE_DAYS.map((d, i) => ({ day: i + 1, week: d.week, label: d.label }));
+      return Object.keys(SENIOR_DAYS).map(Number).sort((a, b) => a - b).map(k => ({ day: k, week: SENIOR_DAYS[k].week, label: SENIOR_DAYS[k].label }));
+    }
+    function defaultDay() { return role === "trainee" ? 1 : 6; }
+
+    /* ---------------- question banks (verbatim from Notion) ----------------
+       Each question: [label, type, extra]
+         scale       -> 1-5, trainee anchors (QUAL)
+         scale_sr    -> 1-5, senior anchors (QUAL_SR)
+         scale_note  -> 1-5 + optional note textarea
+         long        -> required textarea
+         short       -> required short text
+         flag        -> single-select chips + optional note; extra = options[] */
+    const TRAINEE_DAYS = [
+      { week: 1, label: "Day 1 — Orientation, Brand & Tools Overview", q: [
+        ["How clear are you on what Lola Blankets stands for as a brand after today?", "scale"],
+        ["After the tools overview, which tool (Gorgias, Shopify, Gmail/Google, etc.) are you most curious to learn in depth?", "short"],
+        ["What is one thing from the company history, org chart, or site tour that surprised you?", "long"],
+        ["How comfortable do you feel navigating the Lola site and help center on your own?", "scale"],
+        ["After meeting the CX team, whose role would you most like to understand better?", "short"],
+      ]},
+      { week: 1, label: "Day 2 — Site FAQs, Definitions & Gorgias/Shopify Basics", q: [
+        ["How well can you now explain the difference between a Mispick, Mislabel, RTS, DNR, and Lost in Transit?", "scale"],
+        ["Which term from today (Mispick, Mislabel, RTS, DNR, Lost in Transit, or PONR) do you feel most confident explaining?", "short"],
+        ["How confident are you about why a ticket can't be closed in Gorgias without a Contact Reason?", "scale"],
+        ["What is one new tool or term you learned today that you didn't know this morning?", "short"],
+        ["After the Shopify session, how comfortable are you finding a real order and reading its payment vs. fulfillment status?", "scale"],
+      ]},
+      { week: 1, label: "Day 3 — Veracore, Loop Returns, Refunds & Discounts", q: [
+        ["How confident are you searching for and reading an order's status in Veracore?", "scale"],
+        ["Can you recall the different return outcomes (exchange → store credit → refund → upsell → exchange+refund)? Which of them still trips you up?", "long"],
+        ["When is it appropriate to waive the $15 return fee — and when is it not?", "long"],
+        ["How clear are you on the difference between item-level and order-level discounts?", "scale"],
+        ["From the shadowing/practice with Adel or Menjie, what is one thing you'd do differently next time?", "long"],
+      ]},
+      { week: 1, label: "Day 4 — Product Knowledge, Quality Issues & Replacements", q: [
+        ["How confident do you feel identifying a blanket quality issue when a customer describes it?", "scale"],
+        ["Which quality issue do you feel least confident diagnosing (holes, shedding, smell, stains, loose threads, size variation, pilling)?", "short"],
+        ["How confident are you on the steps to check before creating a replacement order?", "scale"],
+        ["How clear are you on the replacement-window rules and when supervisor approval is required?", "scale"],
+        ["After the Contact Reasons Loom + debrief, how clear is the difference between Shipping and Quality contact reasons?", "scale"],
+      ]},
+      { week: 1, label: "Day 5 — SOPs, Policies & Go-Live Readiness", q: [
+        ["After the SOP rapid review, which policy do you most want to re-read before taking live tickets?", "short"],
+        ["How confident are you on current payment policies — no split payments and the two payment-failed scenarios?", "scale"],
+        ["In the practice tickets, which scenario (quality / shipping delay / return complication) felt hardest, and why?", "long"],
+        ["How quickly can you find the right macro now — can you hit the under-30-seconds target?", "scale"],
+        ["How ready do you feel to take live tickets with a senior-agent buddy next week, and what is the one thing you most want support on?", "scale_note", "What do you most want support on?"],
+      ]},
+      { week: 2, label: "Day 6 — Watch & Learn: Tools in Live Context", q: [
+        ["How clearly could you follow the sr agent's reasoning as they worked tickets today?", "scale"],
+        ["Which tool (Gorgias, VeraCore, Shopify, etc.) felt most unfamiliar when you saw it used live?", "short"],
+        ["What is one decision the sr agent made that you would not have known to make on your own?", "long"],
+        ["How confident do you feel about where unassigned tickets come from and how they're picked up?", "scale"],
+        ["What is one question you didn't get to ask today?", "long"],
+      ]},
+      { week: 2, label: "Day 7 — Watch & Learn: Order Management in Action", q: [
+        ["How well do you now understand the order lifecycle from placement to delivery?", "scale"],
+        ["Describe one shipping or order-management scenario you saw today that surprised you.", "long"],
+        ["Which step in handling an unassigned order ticket still feels fuzzy?", "short"],
+        ["How confident are you that you could locate an order and read its status without help?", "scale"],
+        ["What do you most want to see the sr agent do again before you try it yourself?", "long"],
+      ]},
+      { week: 2, label: "Day 8 — Watch & Learn: Returns & Closing Tickets", q: [
+        ["How clear are you on when a ticket should be escalated vs. resolved directly?", "scale"],
+        ["What did you learn today about setting the correct Contact Reason?", "long"],
+        ["Which type of unassigned ticket do you feel least prepared to handle tomorrow when you start driving?", "short"],
+        ["How ready do you feel to take the keyboard tomorrow?", "scale"],
+        ["Name one thing you want to keep a note or cheat-sheet on before you drive.", "short"],
+      ]},
+      { week: 2, label: "Day 9 — First Flight: Trainee Drives (with supervision)", q: [
+        ["How did it feel to drive the session and share your screen today? (comfort)", "scale"],
+        ["On how many tickets did you need the sr agent to step in or correct you, and on what?", "long"],
+        ["What is one thing that was harder in practice than it looked when you were observing?", "long"],
+        ["How confident are you setting the correct Contact Reason on your own now?", "scale"],
+        ["What is one specific skill you want to improve before tomorrow?", "short"],
+      ]},
+      { week: 2, label: "Day 10 — Driving with Supervision: Full Queue Practice", q: [
+        ["Compared to yesterday, how much more independent did you feel today?", "scale"],
+        ["Which type of unassigned ticket do you now feel most confident handling?", "short"],
+        ["Which type still makes you want to double-check with a senior agent?", "short"],
+        ["How well did you manage your handling time / queue pace today?", "scale"],
+        ["Heading into Week 3, what is the single thing you most want more practice on?", "short"],
+      ]},
+      { week: 3, label: "Day 11 — Observe: Broadening Ticket Types", q: [
+        ["How confident are you that you've now seen the full range of common ticket types?", "scale"],
+        ["Which Gorgias View did you spend the least time in during Week 2?", "short"],
+        ["What did you observe today in a less-familiar ticket type that you want to remember?", "long"],
+        ["How clear is the sr agent's reasoning when they triage a less common ticket?", "scale"],
+        ["What is one question this week's tickets have raised that earlier weeks didn't?", "long"],
+      ]},
+      { week: 3, label: "Day 12 — Observe: Edge Cases & Exceptions", q: [
+        ["How comfortable are you recognizing an edge case vs. a routine ticket?", "scale"],
+        ["Describe one exception or unusual situation you watched the sr agent resolve today.", "long"],
+        ["Which policy or SOP did you have to look up (or wish you had) today?", "short"],
+        ["How confident are you that you know where to find the right SOP quickly?", "scale"],
+        ["What is one ticket type you're still hoping to see before you drive again?", "short"],
+      ]},
+      { week: 3, label: "Day 13 — Observe: Tone, De-escalation & Quality", q: [
+        ["How well do you feel you understand the brand's voice in customer replies?", "scale"],
+        ["What did you learn today about de-escalating a frustrated customer?", "long"],
+        ["Which part of writing a high-quality response feels hardest right now?", "short"],
+        ["How confident are you handling a difficult customer on your own?", "scale"],
+        ["Onshore: how ready do you feel to take phone calls tomorrow? Offshore: which Gorgias View do you most want to focus on tomorrow?", "scale_note", "Name the View (offshore) or any note"],
+      ]},
+      { week: 3, label: "Day 14 — Drive with Guidance (Onshore: phones / Offshore: low-exposure Views)", q: [
+        ["Onshore: How comfortable were you taking calls today? Offshore: How comfortable were you in the Gorgias View(s) you focused on?", "scale"],
+        ["What was the hardest moment of the day, and how did you handle it?", "long"],
+        ["Onshore: What part of a live call still feels unnatural? Offshore: Which ticket type in your focus View still confuses you?", "long"],
+        ["How often did you need the sr agent to step in today, and why?", "short"],
+        ["What is one thing you'll do differently tomorrow?", "short"],
+      ]},
+      { week: 3, label: "Day 15 — Drive with Guidance: Building Consistency", q: [
+        ["Compared to yesterday, how much smoother did today feel?", "scale"],
+        ["Onshore: What's one call type you now feel solid on? Offshore: Which previously-unfamiliar View do you now feel solid on?", "short"],
+        ["Where do you still most rely on senior-agent guidance?", "long"],
+        ["How well did you balance quality and speed today?", "scale"],
+        ["Heading into Week 4, what is your single biggest goal?", "short"],
+      ]},
+      { week: 4, label: "Day 16 — Observe: Filling the Gaps", q: [
+        ["How confident do you feel across the full range of ticket types now?", "scale"],
+        ["Which Gorgias View or call type have you still spent the least time on?", "short"],
+        ["What did you observe today that closed a gap you knew you had?", "long"],
+        ["How clear are you on the standards you'll be assessed against at graduation?", "scale"],
+        ["What is one area you want the sr agent to focus your practice on this week?", "short"],
+      ]},
+      { week: 4, label: "Day 17 — Observe: Complex & Multi-step Resolutions", q: [
+        ["How comfortable are you breaking a complex, multi-step ticket into steps?", "scale"],
+        ["Describe a multi-step resolution you watched today.", "long"],
+        ["Which tool hand-off (e.g., Gorgias ↔ VeraCore ↔ Shopify) still feels error-prone?", "short"],
+        ["How confident are you that you could complete any scenario/resolution unaided?", "scale"],
+        ["What is one habit you've seen in senior agents that you want to adopt?", "short"],
+      ]},
+      { week: 4, label: "Day 18 — Observe: Self-Assessment Before Driving", q: [
+        ["Rate your overall readiness for graduation as of today.", "scale"],
+        ["What are your two strongest areas right now?", "short"],
+        ["What is the one area you're most worried about for the assessment?", "short"],
+        ["How confident are you working independently with minimal guidance?", "scale"],
+        ["Onshore: What do you want to practice on calls tomorrow? Offshore: Which focus View do you want to drive tomorrow?", "short"],
+      ]},
+      { week: 4, label: "Day 19 — Drive with Guidance: Final Practice", q: [
+        ["How independent did you feel today vs. the start of Week 4?", "scale"],
+        ["Onshore: Which call type are you most confident taking solo? Offshore: Which previously-low-exposure View are you most confident in now?", "short"],
+        ["Where did you still need guidance today?", "long"],
+        ["How ready do you feel for tomorrow's graduation assessment?", "scale"],
+        ["What is the one thing you want to nail tomorrow?", "short"],
+      ]},
+      { week: 4, label: "Day 20 — Graduation Day", q: [
+        ["Looking back on the whole program, how confident do you feel starting on your own?", "scale"],
+        ["What part of the training experience did you enjoy or value the most?", "long"],
+        ["What is the one skill you'd still like ongoing support on after graduation?", "short"],
+        ["How prepared do you feel to handle a live queue independently going forward?", "scale"],
+        ["Looking back across Weeks 2–4, what was the most valuable part of the shadow program — and what would you change?", "long"],
+      ]},
+    ];
+
+    /* Senior shadow feedback runs Weeks 2-4 only (Days 6-20). Keyed by day #. */
+    const SENIOR_DAYS = {
+      6: { week: 2, label: "Day 6 — Observe: Tools in Live Context", q: [
+        ["How engaged and attentive was the trainee while observing today?", "scale_sr"],
+        ["What questions did the trainee ask, and what did they reveal about their understanding?", "long"],
+        ["(Mirrors trainee self-rating) How well does the trainee actually understand where unassigned tickets come from and how they're picked up?", "scale_sr"],
+        ["Which tool or concept clearly landed, and which one will need reinforcement?", "short"],
+        ["What is the one thing you want to focus on with this trainee tomorrow?", "short"],
+      ]},
+      7: { week: 2, label: "Day 7 — Observe: Order Management in Action", q: [
+        ["How well did the trainee follow your reasoning as you worked order/shipping tickets?", "scale_sr"],
+        ["Describe a moment today where the trainee connected the dots (or got lost).", "long"],
+        ["(Mirrors trainee self-rating) How confident are you the trainee could locate an order and read its status with minimal help?", "scale_sr"],
+        ["What order-management concept is still fuzzy for them?", "short"],
+        ["What is the one thing you want to focus on tomorrow?", "short"],
+      ]},
+      8: { week: 2, label: "Day 8 — Observe: Returns & Closing Tickets", q: [
+        ["How well does the trainee grasp when to escalate vs. resolve directly?", "scale_sr"],
+        ["Give an example from today of their judgment on Contact Reasons or closing tickets.", "long"],
+        ["How ready is this trainee to take the keyboard tomorrow?", "scale_sr"],
+        ["What specific risk are you watching for when they start driving (e.g., refunds, wrong-order edits, missing Contact Reason)?", "long"],
+        ["Readiness flag for driving:", "flag", FLAG3],
+      ]},
+      9: { week: 2, label: "Day 9 — Drive (with supervision): First Live Tickets", q: [
+        ["How did the trainee handle driving and sharing their screen today?", "scale_sr"],
+        ["On which specific tickets did you step in or correct them, and why?", "long"],
+        ["(Mirrors trainee self-rating) How accurately is the trainee setting Contact Reasons on their own?", "scale_sr"],
+        ["What did they do well that you want to reinforce tomorrow?", "long"],
+        ["What is the single skill they most need to improve before tomorrow?", "short"],
+      ]},
+      10: { week: 2, label: "Day 10 — Drive (with supervision): Full Queue Practice", q: [
+        ["Compared to yesterday, how much more independent was the trainee today?", "scale_sr"],
+        ["Which unassigned-ticket types are they now handling reliably, and which still need you?", "long"],
+        ["How well did they manage handling time / queue pace?", "scale_sr"],
+        ["What is the most important thing for them to work on in Week 3?", "short"],
+        ["End-of-Week 2 verdict:", "flag", FLAG3_RISK],
+      ]},
+      11: { week: 3, label: "Day 11 — Observe: Broadening Ticket Types", q: [
+        ["How well is the trainee recognizing less-common ticket types as you work them?", "scale_sr"],
+        ["Which Gorgias View / ticket type does this trainee clearly have the least exposure to?", "short"],
+        ["What did they ask about today that showed growth since Week 2?", "long"],
+        ["Where do you most want to broaden their exposure this week?", "short"],
+        ["One specific thing to focus on tomorrow.", "short"],
+      ]},
+      12: { week: 3, label: "Day 12 — Observe: Edge Cases & Exceptions", q: [
+        ["How comfortable is the trainee distinguishing an edge case from a routine ticket?", "scale_sr"],
+        ["Describe an exception you worked today and how the trainee responded to it.", "long"],
+        ["How well does the trainee know where to find the right SOP quickly?", "scale_sr"],
+        ["What policy or judgment gap did today surface?", "short"],
+        ["One thing to focus on tomorrow.", "short"],
+      ]},
+      13: { week: 3, label: "Day 13 — Observe: Tone, De-escalation & Quality", q: [
+        ["How well does the trainee understand the brand's voice and tone?", "scale_sr"],
+        ["What did you model today on de-escalation, and did the trainee seem to absorb it?", "long"],
+        ["How ready is the trainee to drive tomorrow — onshore on phones, or offshore in their low-exposure Views?", "scale_sr"],
+        ["For offshore trainees: which least-used Gorgias View should they focus on tomorrow, and why?", "short"],
+        ["Readiness flag for driving:", "flag", FLAG3],
+      ]},
+      14: { week: 3, label: "Day 14 — Drive with Guidance (Onshore: phones / Offshore: low-exposure Views)", q: [
+        ["Onshore: How did the trainee handle live calls today? Offshore: How did they handle tickets in their focus View(s)?", "scale_sr"],
+        ["What was the hardest moment for them, and how did they work through it?", "long"],
+        ["On which calls/tickets did you need to step in, and why?", "long"],
+        ["(Mirrors trainee self-rating) How would you rate their balance of quality and pace today?", "scale_sr"],
+        ["One thing for them to do differently tomorrow.", "short"],
+      ]},
+      15: { week: 3, label: "Day 15 — Drive with Guidance: Building Consistency", q: [
+        ["How much smoother was the trainee today vs. yesterday?", "scale_sr"],
+        ["Onshore: which call type are they now solid on? Offshore: which previously-unfamiliar View are they now solid on?", "short"],
+        ["Where do they still rely on your guidance most?", "long"],
+        ["What is the priority focus for Week 4?", "short"],
+        ["End-of-Week 3 verdict:", "flag", FLAG3_RISK],
+      ]},
+      16: { week: 4, label: "Day 16 — Observe: Filling the Gaps", q: [
+        ["How complete is the trainee's coverage across ticket types now?", "scale_sr"],
+        ["Which Gorgias View or call type does the trainee still have the least exposure to?", "short"],
+        ["What gap did today's observation help close?", "long"],
+        ["What do you most want to drill with them this week before graduation?", "short"],
+        ["One thing to focus on tomorrow.", "short"],
+      ]},
+      17: { week: 4, label: "Day 17 — Observe: Complex & Multi-step Resolutions", q: [
+        ["How well does the trainee follow a complex, multi-step resolution?", "scale_sr"],
+        ["Describe a multi-step case you worked today and how the trainee tracked it.", "long"],
+        ["Which tool hand-off (Gorgias ↔ VeraCore ↔ Shopify) still looks error-prone for them? (confidence they could do it unaided)", "scale_sr"],
+        ["What habit do you want them to adopt from how you handled today's tickets?", "short"],
+        ["One thing to focus on tomorrow.", "short"],
+      ]},
+      18: { week: 4, label: "Day 18 — Observe: Self-Assessment Before Driving", q: [
+        ["How accurate is the trainee's own read on their readiness vs. your assessment?", "scale_sr"],
+        ["What are this trainee's two clearest strengths heading into graduation?", "short"],
+        ["What is the one area you're most concerned about for the assessment?", "short"],
+        ["How independent are they with minimal guidance?", "scale_sr"],
+        ["Readiness flag for graduation:", "flag", FLAG3],
+      ]},
+      19: { week: 4, label: "Day 19 — Drive with Guidance: Final Practice", q: [
+        ["How independent was the trainee today vs. the start of Week 4?", "scale_sr"],
+        ["Onshore: which call type are they ready to take solo? Offshore: which previously-low-exposure View are they now confident in?", "short"],
+        ["Where did they still need guidance today?", "long"],
+        ["How ready are they for tomorrow's graduation assessment?", "scale_sr"],
+        ["What is the one thing you'll be watching for at graduation?", "short"],
+      ]},
+      20: { week: 4, label: "Day 20 — Graduation Day", q: [
+        ["How did the trainee perform in the graduation assessment overall?", "scale_sr"],
+        ["What part of the program showed the most growth for this trainee?", "long"],
+        ["What is the one skill they'll need ongoing support on after graduation?", "short"],
+        ["How ready are they to handle a live queue independently?", "scale_sr"],
+        ["Graduation verdict (note your recommended GCT track + rationale):", "flag", GRAD],
+      ]},
+    };
+
+    /* ---------------- state ---------------- */
+    let role = null, progDay = 1, steps = [], cur = 0, answers = {};
+    const view = document.getElementById("view");
+    const nav = document.getElementById("nav");
+    const prog = document.getElementById("prog");
+    const todayISO = new Date().toISOString().slice(0, 10);
+
+    /* the question set is chosen by the explicitly-picked training day */
+    function daySet() {
+      return role === "trainee" ? (TRAINEE_DAYS[progDay - 1] || null) : (SENIOR_DAYS[progDay] || null);
+    }
+
+    function buildSteps() {
+      steps = [];
+      const m = role === "trainee" ? metaTrainee() : metaSenior();
+      m.forEach(f => steps.push({ kind: "meta", f }));
+      const set = daySet();
+      if (!set) { steps.push({ kind: "notice" }); steps.push({ kind: "done" }); return; }
+      set.q.forEach((q, i) => steps.push({ kind: "q", q, id: "q" + (i + 1), n: i + 1 }));
+      steps.push({ kind: "done" });
+    }
+
+    /* ---------------- render ---------------- */
+    function start() { renderRole(); }
+
+    function renderRole() {
+      prog.style.width = "0%";
+      nav.innerHTML = "";
+      view.innerHTML = `<div class="pad screen">
+    <div style="text-align:center">
+      <p class="kicker">CX Shadowing · End-of-day check-in</p>
+      <h1>Two minutes. That's it. 🙌</h1>
+      <p class="help">Your quick reflection makes tomorrow's shadowing sharper. Who's filling this out?</p>
+    </div>
+    <div class="roles">
+      <div class="role trainee" data-r="trainee">
+        <div class="emo">🌱</div><h3>I'm the trainee</h3>
+        <p>Reflect on how your day went and what you want next.</p>
+      </div>
+      <div class="role senior" data-r="senior">
+        <div class="emo">⭐</div><h3>I'm the senior agent</h3>
+        <p>Share how your trainee did and where to focus next.</p>
+      </div>
+    </div>
+    <p class="kbd">Tip: you can use your <b>keyboard</b> — number keys for ratings, <b>Enter</b> to continue.</p>
+  </div>`;
+      view.querySelectorAll(".role").forEach(el => el.onclick = () => {
+        role = el.dataset.r;
+        progDay = defaultDay();
+        answers = { _role: role, _submitted_at: null, date: todayISO, training_day: progDay };
+        buildSteps(); cur = 0; render();
+      });
+    }
+
+    function weekOf(day) { return Math.ceil(day / 5); }
+
+    function render() {
+      const s = steps[cur];
+      if (s.kind === "done") return renderDone();
+      if (s.kind === "notice") return renderNotice();
+      prog.style.width = ((cur) / (steps.length - 1) * 100) + "%";
+      const badge = `<span class="badge ${role}">${role === "trainee" ? "🌱 Trainee" : "⭐ Senior agent"}</span>`;
+      const counter = `<span class="step-i">Step ${cur + 1} of ${steps.length - 1}</span>`;
+      let body = "";
+      if (s.kind === "meta") body = renderField(s.f);
+      else body = renderQ(s);
+      const set = daySet();
+      const dayTag = (s.kind === "meta" && s.f.id === "training_day" && set)
+        ? `<p class="hint" style="margin-top:14px">📋 Today's questions: <b id="settag">Week ${set.week} · ${set.label}</b></p>` : "";
+      view.innerHTML = `<div class="pad screen">
+     <div style="display:flex;justify-content:space-between;align-items:center">${badge}${counter}</div>
+     ${body}
+     ${dayTag}
+   </div>`;
+      bindField(s);
+      renderNav(s);
+      focusFirst(s);
+    }
+
+    function renderNotice() {
+      prog.style.width = "100%";
+      const set = TRAINEE_DAYS[progDay - 1];
+      view.innerHTML = `<div class="pad screen">
+        <span class="badge senior">⭐ Senior agent</span>
+        <h2 class="q">Senior shadow feedback starts in Week 2.</h2>
+        <div class="notice">The date you picked maps to <b>Day ${progDay}${set ? " (Week " + set.week + ")" : ""}</b>, which is part of Week 1 classroom training — there's no senior shadow entry for that day.<br><br>Pick a date in <b>Week 2 or later (Day 6+)</b> to log a shadow-feedback entry.</div>
+      </div>`;
+      nav.innerHTML = `<button class="btn ghost" id="backb">← Back</button><span class="hint"></span><button class="btn ghost" id="restart">Start over</button>`;
+      document.getElementById("backb").onclick = prev;
+      document.getElementById("restart").onclick = () => { role = null; answers = {}; renderRole(); };
+    }
+
+    function renderField(f) {
+      const req = f.req ? ` <span class="req">*</span>` : "";
+      let inner = "";
+      if (f.type === "date") inner = `<input type="date" id="f" value="${answers[f.id] || todayISO}"/>`;
+      else if (f.type === "text") inner = `<input type="text" id="f" placeholder="Type a name…" value="${(answers[f.id] || "").replace(/"/g, '&quot;')}"/>`;
+      else if (f.type === "single") inner = chips(f.options, f.id, false);
+      else if (f.type === "multi") inner = chips(f.options, f.id, true);
+      else if (f.type === "day") {
+        const sel = answers.training_day || defaultDay();
+        inner = `<select class="daysel" id="dayf">` + dayOptions().map(o =>
+          `<option value="${o.day}" ${o.day === sel ? "selected" : ""}>Day ${o.day} · Week ${o.week} — ${o.label.replace(/^Day \d+ — /, "")}</option>`
+        ).join("") + `</select>`;
+      }
+      return `<h2 class="q">${f.label}${req}</h2>${f.help ? `<p class="help">${f.help}</p>` : ""}${inner}`;
+    }
+
+    function renderQ(s) {
+      const [label, type, extra] = s.q;
+      const id = s.id;
+      if (type === "scale" || type === "scale_sr" || type === "scale_note") {
+        const anchors = type === "scale_sr" ? QUAL_SR : QUAL;
+        const cells = anchors.map((a, i) => {
+          const v = i + 1, sel = answers[id] === v ? "sel" : "";
+          return `<div class="opt ${sel}" data-v="${v}"><span class="emo">${EMO[i]}</span><span class="n">${v}</span><span class="lab">${a}</span></div>`;
+        }).join("");
+        let out = `<h2 class="q">${label} <span class="req">*</span></h2>
+      <div class="scale" id="scale">${cells}</div>
+      <div class="anchor"><span>${anchors[0]}</span><span>${anchors[4]}</span></div>`;
+        if (type === "scale_note") {
+          out += `<p class="notelab">${extra || "Add a note (optional)"}</p>
+          <textarea id="note" class="note" placeholder="Optional note…">${answers[id + "_note"] || ""}</textarea>`;
+        }
+        return out;
+      }
+      if (type === "flag") {
+        return `<h2 class="q">${label} <span class="req">*</span></h2>${chips(extra, id, false)}
+        <p class="notelab">Add a brief why / rationale (optional)</p>
+        <textarea id="note" class="note" placeholder="Optional note…">${answers[id + "_note"] || ""}</textarea>`;
+      }
+      if (type === "long") {
+        return `<h2 class="q">${label} <span class="req">*</span></h2><textarea id="f" placeholder="Type your thoughts…">${answers[id] || ""}</textarea><div class="counter"><span id="cc">0</span> chars</div>`;
+      }
+      if (type === "short") {
+        return `<h2 class="q">${label} <span class="req">*</span></h2><input type="text" id="f" placeholder="A short answer…" value="${(answers[id] || "").replace(/"/g, '&quot;')}"/>`;
+      }
+    }
+
+    function chips(options, id, multi) {
+      const val = answers[id] || (multi ? [] : null);
+      return `<div class="chips" data-id="${id}" data-multi="${multi}">` + options.map(o => {
+        const on = multi ? val.includes(o) : val === o;
+        return `<div class="chip ${on ? "sel" : ""}" data-v="${o.replace(/"/g, '&quot;')}"><span class="tick">✓</span>${o}</div>`;
+      }).join("") + `</div>`;
+    }
+
+    /* ---------------- bind ---------------- */
+    function bindField(s) {
+      const isScaleNote = s.kind === "q" && s.q[1] === "scale_note";
+      const isFlag = s.kind === "q" && s.q[1] === "flag";
+      // scale
+      const sc = document.getElementById("scale");
+      if (sc) {
+        const id = s.id;
+        sc.querySelectorAll(".opt").forEach(o => o.onclick = () => {
+          answers[id] = +o.dataset.v; save();
+          sc.querySelectorAll(".opt").forEach(x => x.classList.remove("sel"));
+          o.classList.add("sel"); updateNext();
+          if (!isScaleNote) setTimeout(next, 260); // plain scale auto-advances
+        });
+      }
+      // chips
+      view.querySelectorAll(".chips").forEach(box => {
+        const id = box.dataset.id; const multi = box.dataset.multi === "true";
+        box.querySelectorAll(".chip").forEach(c => c.onclick = () => {
+          const v = c.dataset.v;
+          if (multi) {
+            answers[id] = answers[id] || []; const i = answers[id].indexOf(v);
+            if (i >= 0) answers[id].splice(i, 1); else answers[id].push(v);
+            c.classList.toggle("sel");
+          } else {
+            answers[id] = v; box.querySelectorAll(".chip").forEach(x => x.classList.remove("sel")); c.classList.add("sel");
+            save(); updateNext();
+            if (!isFlag && s.kind === "meta") { setTimeout(next, 220); return; } // meta single auto-advances
+            return;
+          }
+          save(); updateNext();
+        });
+      });
+      // optional note (scale_note / flag)
+      const note = document.getElementById("note");
+      if (note) {
+        note.oninput = () => { answers[s.id + "_note"] = note.value; save(); };
+      }
+      // training-day picker
+      const dayf = document.getElementById("dayf");
+      if (dayf) {
+        dayf.onchange = () => {
+          progDay = +dayf.value; answers.training_day = progDay;
+          buildSteps();
+          const set = daySet();
+          const tag = document.getElementById("settag");
+          if (tag) tag.textContent = set ? "Week " + set.week + " · " + set.label : "—";
+          save(); updateNext();
+        };
+      }
+      // text/date
+      const f = document.getElementById("f");
+      if (f) {
+        const id = s.kind === "meta" ? s.f.id : s.id;
+        const cc = document.getElementById("cc");
+        if (cc) cc.textContent = (f.value || "").length;
+        f.oninput = () => {
+          answers[id] = f.value; if (cc) cc.textContent = f.value.length;
+          save(); updateNext();
+        };
+      }
+    }
+
+    function isAnswered(s) {
+      if (s.kind === "meta") {
+        const f = s.f; if (!f.req) return true; const v = answers[f.id];
+        return f.type === "multi" ? (v && v.length > 0) : !!v;
+      }
+      if (s.kind !== "q") return true;
+      const type = s.q[1]; const v = answers[s.id];
+      if (type === "long" || type === "short") return !!(v && String(v).trim());
+      return !!v; // scale / scale_sr / scale_note / flag -> require the rating/choice
+    }
+    function updateNext() { const b = document.getElementById("nextb"); if (b) b.disabled = !isAnswered(steps[cur]); }
+
+    function renderNav(s) {
+      const last = cur === steps.length - 2;
+      nav.innerHTML = `
+    <button class="btn ghost" id="backb" ${cur === 0 ? "style='visibility:hidden'" : ""}>← Back</button>
+    <span class="hint" id="reqhint"></span>
+    <button class="btn primary" id="nextb">${last ? "Review & submit ✨" : "Next →"}</button>`;
+      document.getElementById("backb").onclick = prev;
+      document.getElementById("nextb").onclick = next;
+      updateNext();
+    }
+    function focusFirst(s) {
+      const f = document.getElementById("f");
+      if (f && (s.kind === "meta" && (s.f.type === "date" || s.f.type === "text") || s.kind === "q" && (s.q[1] === "long" || s.q[1] === "short"))) { f.focus(); }
+    }
+
+    function next() {
+      if (!isAnswered(steps[cur])) return;
+      if (cur < steps.length - 1) { cur++; render(); }
+    }
+    function prev() { if (cur > 0) { cur--; render(); } }
+
+    /* keyboard */
+    document.addEventListener("keydown", e => {
+      if (!role) return;
+      const s = steps[cur]; if (!s) return;
+      if (e.key === "Enter" && document.activeElement.tagName !== "TEXTAREA") { const b = document.getElementById("nextb"); if (b && !b.disabled) { e.preventDefault(); next(); } }
+      if (s.kind === "q" && /scale/.test(s.q[1]) && /^[1-5]$/.test(e.key) && document.activeElement.tagName !== "TEXTAREA") {
+        const o = document.querySelector(`.opt[data-v="${e.key}"]`); if (o) o.click();
+      }
+    });
+
+    /* persistence */
+    function save() { try { localStorage.setItem("eod_draft", JSON.stringify({ role, progDay, answers })); } catch (e) { } }
+    function clearDraft() { try { localStorage.removeItem("eod_draft"); } catch (e) { } }
+
+    /* build the structured payload sent to the sheet */
+    function buildPayload() {
+      const set = daySet();
+      const responses = steps.filter(s => s.kind === "q").map(s => {
+        const [label, type] = s.q;
+        let value = answers[s.id];
+        if (type === "scale_note" || type === "flag") {
+          const note = answers[s.id + "_note"];
+          value = (value != null ? value : "") + (note ? " — " + note : "");
+        }
+        return { n: s.n, label, type, value: value == null ? "" : value };
+      });
+      return {
+        _role: role,
+        _submitted_at: new Date().toISOString(),
+        date: answers.date || todayISO,
+        program_day: progDay,
+        week: set ? set.week : weekOf(progDay),
+        day_label: set ? set.label : "",
+        trainee_name: answers.trainee_name || "",
+        senior_agent_name: answers.senior_agent_name || "",
+        mode: answers.mode || "",
+        responses
+      };
+    }
+
+    /* ---------------- done ---------------- */
+    function renderDone() {
+      prog.style.width = "100%";
+      const payloadObj = buildPayload();
+      saveHistory(payloadObj); clearDraft(); confetti(); sendToSheet(payloadObj);
+      const metaRows = [
+        ["Date", payloadObj.date],
+        ["Program day", "Day " + payloadObj.program_day + " (Week " + payloadObj.week + ")"],
+        ["Trainee", payloadObj.trainee_name],
+      ];
+      if (role === "senior") { metaRows.push(["Senior agent", payloadObj.senior_agent_name]); metaRows.push(["Mode", payloadObj.mode]); }
+      const rows = metaRows.map(([k, v]) => `<div><b>${k}</b><br>${v || "—"}</div>`).join("")
+        + payloadObj.responses.map(r => `<div><b>${r.n}. ${r.label}</b><br>${Array.isArray(r.value) ? r.value.join(", ") : (r.value || "—")}</div>`).join("");
+      nav.innerHTML = "";
+      view.innerHTML = `<div class="done screen">
+    <div class="big">🎉</div>
+    <h1>You're done — thank you!</h1>
+    <p class="help">${role === "trainee" ? "Your reflection helps us tailor tomorrow's sessions to you." : "Your feedback keeps the trainees growing fast."}</p>
+    <div class="summary">${rows}</div>
+    <div class="row">
+      <button class="btn primary" id="dl">⬇ Download response (JSON)</button>
+      <button class="btn ghost" id="cp">📋 Copy</button>
+      <button class="btn ghost" id="again">+ New check-in</button>
+    </div>
+    <p class="kbd" id="syncmsg">${SHEET_ENDPOINT ? "⏳ Syncing to Google Sheet…" : "Saved locally on this device."}</p>
+  </div>`;
+      const payload = JSON.stringify(payloadObj, null, 2);
+      document.getElementById("dl").onclick = () => {
+        const b = new Blob([payload], { type: "application/json" });
+        const a = document.createElement("a"); a.href = URL.createObjectURL(b);
+        a.download = `eod_${payloadObj._role}_${(payloadObj.trainee_name || "entry")}_${payloadObj.date}.json`; a.click();
+      };
+      document.getElementById("cp").onclick = async () => { try { await navigator.clipboard.writeText(payload); document.getElementById("cp").textContent = "✓ Copied"; } catch (e) { } };
+      document.getElementById("again").onclick = () => { role = null; answers = {}; renderRole(); };
+    }
+    function saveHistory(p) { try { const h = JSON.parse(localStorage.getItem("eod_responses") || "[]"); h.push(p); localStorage.setItem("eod_responses", JSON.stringify(h)); } catch (e) { } }
+
+    /* send to Google Sheet via Apps Script web app. no-cors avoids a CORS
+       preflight; we can't read the response, so we optimistically show success. */
+    function sendToSheet(p) {
+      if (!SHEET_ENDPOINT) return;
+      fetch(SHEET_ENDPOINT, {
+        method: "POST", mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(p)
+      })
+        .then(() => { const m = document.getElementById("syncmsg"); if (m) m.textContent = "✓ Sent to Google Sheet · also saved locally."; })
+        .catch(() => { const m = document.getElementById("syncmsg"); if (m) m.textContent = "⚠ Couldn't reach the sheet — your JSON is saved locally, use Download as backup."; });
+    }
+
+    /* confetti */
+    function confetti() {
+      const c = document.getElementById("cf"), x = c.getContext("2d");
+      c.width = innerWidth; c.height = innerHeight;
+      const cols = ["#6d5cf0", "#ff7a59", "#16a34a", "#ffd166", "#4dabf7"];
+      let p = Array.from({ length: 140 }, () => ({
+        x: Math.random() * c.width, y: -20 - Math.random() * c.height,
+        r: 5 + Math.random() * 7, c: cols[Math.random() * cols.length | 0], vy: 2 + Math.random() * 4, vx: -2 + Math.random() * 4, a: Math.random() * 6.28
+      }));
+      let t = 0; (function loop() {
+        t++; x.clearRect(0, 0, c.width, c.height);
+        p.forEach(o => {
+          o.y += o.vy; o.x += o.vx; o.a += .1; x.save(); x.translate(o.x, o.y); x.rotate(o.a);
+          x.fillStyle = o.c; x.fillRect(-o.r / 2, -o.r / 2, o.r, o.r * .6); x.restore();
+        });
+        if (t < 150) requestAnimationFrame(loop); else x.clearRect(0, 0, c.width, c.height);
+      })();
+    }
+
+    /* resume draft (silent; kept frictionless) */
+    (function init() {
+      try {
+        const d = JSON.parse(localStorage.getItem("eod_draft") || "null");
+        if (d && d.role && confirmResume()) {
+          role = d.role; progDay = d.progDay || 1; answers = d.answers || {}; buildSteps();
+          cur = 0; while (cur < steps.length - 1 && isAnswered(steps[cur])) cur++; render(); return;
+        }
+      } catch (e) { }
+      start();
+    })();
+    function confirmResume() { return false; }
+  </script>
+</body>
+
+</html>
