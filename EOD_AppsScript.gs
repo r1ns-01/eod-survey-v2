@@ -6,7 +6,7 @@
  *
  * The form sends a structured payload that already carries each question's
  * TEXT alongside the answer, so columns stay stable even when you edit the
- * questions later — Q1..Q5 columns hold the question text + the answer.
+ * questions later — Q1..Q8 columns hold the question text + the answer.
  *
  * SETUP
  *   1. Open your Google Sheet → Extensions → Apps Script.
@@ -23,7 +23,9 @@
 
 var TRAINEE_TAB = "Trainee Responses";
 var SENIOR_TAB = "Senior Agent Responses";
-var MAX_Q = 5; // questions per day in both banks
+var MAX_Q = 8; // max questions per day. Trainee Weeks 2-4 (Days 6-20) carry 8
+               // questions (5 original + 3 senior-agent); shorter days and the
+               // Senior bank (5 each) simply leave the extra columns blank.
 
 function setup() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
