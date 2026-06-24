@@ -5,11 +5,16 @@ program. Two roles — **Trainee** and **Senior Agent** — each get the exact
 question set for the current training day, pulled straight from the program's
 Notion surveys:
 
-- **Trainee POV** — Weeks 1–4, Days 1–20 (5 questions/day)
+- **Trainee POV** — Weeks 1–4, Days 1–20. Week 1 has 5 questions/day; Weeks 2–4
+  (Days 6–20) have 8 questions/day — the original 5 plus 3 senior-agent
+  feedback questions (who you shadowed/were supervised by, a rating, and an
+  open reflection).
 - **Senior Agent POV** — Weeks 2–4, Days 6–20 (5 questions/day; senior shadow
-  feedback starts in Week 2)
+  feedback starts in Week 2).
 
-Each submission appends a row to the Google Sheet **EOD Check-in Responses**
+All rating questions use a **1–10** scale (1 = not at all, 10 = completely /
+excellent). Each submission appends a row to the Google Sheet
+**EOD Check-in Responses**
 (<https://docs.google.com/spreadsheets/d/1_8SphH9-DzSN7BxhR-RDRsMTI6XlZ7cO5MuqHhqHLm4/edit>),
 on a **Trainee Responses** tab and a **Senior Agent Responses** tab. Responses
 also save locally in the browser and can be downloaded as JSON (backup).
@@ -52,16 +57,22 @@ the survey so people pick the right day.
    `const SHEET_ENDPOINT = "";`
    Paste your Web app URL between the quotes and save.
 
+> **Upgrading an existing deployment?** The trainee bank now runs up to 8
+> questions/day, so re-run **`setup`** once to add the `Q6–Q8` header columns.
+> Re-running `setup()` only rewrites the header rows — it never deletes data.
+
 That's it. Every time someone finishes the form, a new row is appended to the
 right tab.
 
 ## Sheet columns
 
 Each row carries the meta fields plus the day's questions inline:
-`Q1 / Q1 Answer … Q5 / Q5 Answer`. Storing the question text next to the answer
+`Q1 / Q1 Answer … Q8 / Q8 Answer`. Storing the question text next to the answer
 means columns stay stable even if you reword questions later — no need to
-regenerate the script. (Trainee tab: Submitted At, Date, Program Day, Week, Day
-Label, Trainee, Q1…Q5. Senior tab adds Senior Agent and Mode.)
+regenerate the script. Days with fewer than 8 questions (Week 1 and the whole
+Senior bank) simply leave the trailing Q columns blank. (Trainee tab: Submitted
+At, Date, Program Day, Week, Day Label, Trainee, Q1…Q8. Senior tab adds Senior
+Agent and Mode.)
 
 ## Notes
 
