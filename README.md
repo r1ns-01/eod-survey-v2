@@ -13,11 +13,22 @@ Notion surveys:
   feedback starts in Week 2).
 
 All rating questions use a **1–10** scale (1 = not at all, 10 = completely /
-excellent). Each submission appends a row to the Google Sheet
+excellent).
+
+Each submission is routed to a **per-day tab** in the Google Sheet
 **EOD Check-in Responses**
 (<https://docs.google.com/spreadsheets/d/1_8SphH9-DzSN7BxhR-RDRsMTI6XlZ7cO5MuqHhqHLm4/edit>),
-on a **Trainee Responses** tab and a **Senior Agent Responses** tab. Responses
-also save locally in the browser and can be downloaded as JSON (backup).
+named from the role and the chosen training day:
+
+| Role | Day | Tab |
+|------|-----|-----|
+| Trainee | 1 | `Trainee D01` |
+| Trainee | 20 | `Trainee D20` |
+| Senior Agent | 6 | `Senior D06` |
+| Senior Agent | 20 | `Senior D20` |
+
+Responses also save locally in the browser and can be downloaded as JSON
+(backup).
 
 ## Files
 
@@ -30,11 +41,13 @@ also save locally in the browser and can be downloaded as JSON (backup).
 The person filling out the form picks the **training day** explicitly. After
 choosing a role they answer two header fields up front — today's **date** and a
 **"Which training day is this?"** dropdown — and that picked day (not the
-calendar weekday) selects the question set. This means a new hire can start on
-any weekday: there's no fixed cohort start date to configure.
+calendar weekday) selects the question set **and the destination tab**. This
+means a new hire can start on any weekday: there's no fixed cohort start date to
+configure.
 
-- Trainee picker offers **Day 1–20** (Weeks 1–4).
-- Senior picker offers **Day 6–20** (shadow feedback runs Weeks 2–4).
+- Trainee picker offers **Day 1–20** (Weeks 1–4) → `Trainee D01`–`Trainee D20`.
+- Senior picker offers **Day 6–20** (shadow feedback runs Weeks 2–4) →
+  `Senior D06`–`Senior D20`.
 
 Both the date and the training day are saved with every response. Since start
 dates vary per hire, post each new hire's start date somewhere visible before
@@ -45,9 +58,10 @@ the survey so people pick the right day.
 1. Open the Google Sheet above.
 2. **Extensions → Apps Script.** Delete any starter code.
 3. Paste the entire contents of **`EOD_AppsScript.gs`**, then Save.
-4. In the toolbar, select the function **`setup`** and click **Run**. Approve
-   the permission prompt (it's your own script). This creates both tabs +
-   headers.
+4. *(Optional)* In the toolbar, select **`setup`** and click **Run** to
+   pre-create all per-day tabs as empty sheets. Approve the permission prompt.
+   This is optional — each per-day tab is also created automatically the first
+   time someone submits for that day.
 5. **Deploy → New deployment → Web app.**
    - Description: EOD endpoint
    - Execute as: **Me**
@@ -57,28 +71,33 @@ the survey so people pick the right day.
    `const SHEET_ENDPOINT = "";`
    Paste your Web app URL between the quotes and save.
 
-> **Upgrading an existing deployment?** The trainee bank now runs up to 8
-> questions/day, so re-run **`setup`** once to add the `Q6–Q8` header columns.
-> Re-running `setup()` only rewrites the header rows — it never deletes data.
-
 That's it. Every time someone finishes the form, a new row is appended to the
-right tab.
+correct `Trainee D##` / `Senior D##` tab.
 
-## Sheet columns
+## How each tab is laid out
 
-Each row carries the meta fields plus the day's questions inline:
-`Q1 / Q1 Answer … Q8 / Q8 Answer`. Storing the question text next to the answer
-means columns stay stable even if you reword questions later — no need to
-regenerate the script. Days with fewer than 8 questions (Week 1 and the whole
-Senior bank) simply leave the trailing Q columns blank. (Trainee tab: Submitted
-At, Date, Program Day, Week, Day Label, Trainee, Q1…Q8. Senior tab adds Senior
-Agent and Mode.)
+Each per-day tab uses **answer-only columns whose header is the full question
+text**, so a column reads `Q1. How clear are you on what Lola Blankets stands
+for…` and the cells below it hold just the answers.
+
+- **Trainee tabs:** Submitted At, Date, Program Day, Week, Day Label, Trainee,
+  then `Q1.`…`Q5.` (Week 1) or `Q1.`…`Q8.` (Weeks 2–4).
+- **Senior tabs:** the same meta columns plus Senior Agent and Mode, then
+  `Q1.`…`Q5.`
+- A **hidden `Raw JSON`** column sits at the far right of every tab as a backup
+  of the full submission.
+
+Headers are written automatically from each submission, so they always match
+the live form. If a day's questions change (e.g. a trainee day grows from 5 to 8
+questions), the header row updates itself on the next submission — no need to
+edit the script.
 
 ## Notes
 
-- Re-running `setup()` only rewrites the header rows; it never deletes data.
+- The script never deletes tabs or rows; it only creates tabs, (re)writes the
+  header row, and appends responses.
 - The form sends with `no-cors`, so it can't read the reply — it optimistically
-  shows "Sent." To hard-verify, watch a test row land in the sheet.
+  shows "Sent." To hard-verify, watch a test row land in the right tab.
 - If `SHEET_ENDPOINT` is left blank, the form still works fully offline:
   responses save locally and can be downloaded/copied as JSON.
 
