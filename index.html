@@ -180,8 +180,8 @@
     /* scale */
     .scale {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 6px;
       margin-top: 24px
     }
 
@@ -189,8 +189,8 @@
       cursor: pointer;
       border: 2px solid var(--line);
       background: #fff;
-      border-radius: 16px;
-      padding: 16px 6px 12px;
+      border-radius: 12px;
+      padding: 14px 2px 12px;
       text-align: center;
       transition: .16s;
       user-select: none
@@ -515,7 +515,7 @@
       }
 
       .scale {
-        gap: 7px
+        gap: 3px
       }
 
       .opt .lab {
@@ -556,6 +556,7 @@
     const QUAL = ["Not at all", "A little", "Somewhat", "Mostly", "Completely"];
     const QUAL_SR = ["Major concern", "Below bar", "Developing", "Solid", "Excellent"];
     const EMO = ["😣", "🙁", "😐", "🙂", "😄"];
+    const SCALE_MAX = 10; // ratings are 1–10
     const FLAG3 = ["On track", "Needs more practice", "Not yet"];
     const FLAG3_RISK = ["On track", "Needs more practice", "At risk"];
     const GRAD = ["Pass", "Pass with Conditions", "Not Yet"];
@@ -638,6 +639,9 @@
         ["What is one decision the sr agent made that you would not have known to make on your own?", "long"],
         ["How confident do you feel about where unassigned tickets come from and how they're picked up?", "scale"],
         ["What is one question you didn't get to ask today?", "long"],
+        ["Which senior agent did you shadow today?", "single", SENIOR_AGENTS],
+        ["How clearly did the senior agent explain their reasoning while working tickets today?", "scale"],
+        ["What is one thing about the senior agent's teaching style that helped you learn today?", "long"],
       ]},
       { week: 2, label: "Day 7 — Watch & Learn: Order Management in Action", q: [
         ["How well do you now understand the order lifecycle from placement to delivery?", "scale"],
@@ -645,6 +649,9 @@
         ["Which step in handling an unassigned order ticket still feels fuzzy?", "short"],
         ["How confident are you that you could locate an order and read its status without help?", "scale"],
         ["What do you most want to see the sr agent do again before you try it yourself?", "long"],
+        ["Which senior agent did you shadow today?", "single", SENIOR_AGENTS],
+        ["How efficiently did the senior agent move through their queue and order-management tasks today?", "scale"],
+        ["What did the senior agent do that showed strong knowledge of order-management processes?", "long"],
       ]},
       { week: 2, label: "Day 8 — Watch & Learn: Returns & Closing Tickets", q: [
         ["How clear are you on when a ticket should be escalated vs. resolved directly?", "scale"],
@@ -652,6 +659,9 @@
         ["Which type of unassigned ticket do you feel least prepared to handle tomorrow when you start driving?", "short"],
         ["How ready do you feel to take the keyboard tomorrow?", "scale"],
         ["Name one thing you want to keep a note or cheat-sheet on before you drive.", "short"],
+        ["Which senior agent did you shadow today?", "single", SENIOR_AGENTS],
+        ["How well did the senior agent demonstrate the correct process for returns and closing tickets?", "scale"],
+        ["How clearly did the senior agent explain when to escalate a ticket vs. resolve it directly?", "long"],
       ]},
       { week: 2, label: "Day 9 — First Flight: Trainee Drives (with supervision)", q: [
         ["How did it feel to drive the session and share your screen today? (comfort)", "scale"],
@@ -659,6 +669,9 @@
         ["What is one thing that was harder in practice than it looked when you were observing?", "long"],
         ["How confident are you setting the correct Contact Reason on your own now?", "scale"],
         ["What is one specific skill you want to improve before tomorrow?", "short"],
+        ["Which senior agent supervised you today?", "single", SENIOR_AGENTS],
+        ["How helpful was the senior agent's guidance and feedback while you drove today?", "scale"],
+        ["When the senior agent stepped in to correct you, how clearly did they explain the fix?", "long"],
       ]},
       { week: 2, label: "Day 10 — Driving with Supervision: Full Queue Practice", q: [
         ["Compared to yesterday, how much more independent did you feel today?", "scale"],
@@ -666,6 +679,9 @@
         ["Which type still makes you want to double-check with a senior agent?", "short"],
         ["How well did you manage your handling time / queue pace today?", "scale"],
         ["Heading into Week 3, what is the single thing you most want more practice on?", "short"],
+        ["Which senior agent supervised you today?", "single", SENIOR_AGENTS],
+        ["How much did the senior agent's support increase your confidence handling the queue today?", "scale"],
+        ["What is one thing the senior agent could do differently to support you better?", "long"],
       ]},
       { week: 3, label: "Day 11 — Observe: Broadening Ticket Types", q: [
         ["How confident are you that you've now seen the full range of common ticket types?", "scale"],
@@ -673,6 +689,9 @@
         ["What did you observe today in a less-familiar ticket type that you want to remember?", "long"],
         ["How clear is the sr agent's reasoning when they triage a less common ticket?", "scale"],
         ["What is one question this week's tickets have raised that earlier weeks didn't?", "long"],
+        ["Which senior agent did you shadow today?", "single", SENIOR_AGENTS],
+        ["How well did the senior agent help you understand less-common ticket types today?", "scale"],
+        ["How did the senior agent's triage reasoning help you follow less-familiar tickets?", "long"],
       ]},
       { week: 3, label: "Day 12 — Observe: Edge Cases & Exceptions", q: [
         ["How comfortable are you recognizing an edge case vs. a routine ticket?", "scale"],
@@ -680,6 +699,9 @@
         ["Which policy or SOP did you have to look up (or wish you had) today?", "short"],
         ["How confident are you that you know where to find the right SOP quickly?", "scale"],
         ["What is one ticket type you're still hoping to see before you drive again?", "short"],
+        ["Which senior agent did you shadow today?", "single", SENIOR_AGENTS],
+        ["How clearly did the senior agent walk you through edge cases and exceptions today?", "scale"],
+        ["How comfortable did the senior agent make it to ask questions about unusual situations?", "long"],
       ]},
       { week: 3, label: "Day 13 — Observe: Tone, De-escalation & Quality", q: [
         ["How well do you feel you understand the brand's voice in customer replies?", "scale"],
@@ -687,6 +709,9 @@
         ["Which part of writing a high-quality response feels hardest right now?", "short"],
         ["How confident are you handling a difficult customer on your own?", "scale"],
         ["Onshore: how ready do you feel to take phone calls tomorrow? Offshore: which Gorgias View do you most want to focus on tomorrow?", "scale_note", "Name the View (offshore) or any note"],
+        ["Which senior agent did you shadow today?", "single", SENIOR_AGENTS],
+        ["How well did the senior agent model the brand's tone and de-escalation skills today?", "scale"],
+        ["What did you learn from the senior agent about de-escalating a frustrated customer?", "long"],
       ]},
       { week: 3, label: "Day 14 — Drive with Guidance (Onshore: phones / Offshore: low-exposure Views)", q: [
         ["Onshore: How comfortable were you taking calls today? Offshore: How comfortable were you in the Gorgias View(s) you focused on?", "scale"],
@@ -694,6 +719,9 @@
         ["Onshore: What part of a live call still feels unnatural? Offshore: Which ticket type in your focus View still confuses you?", "long"],
         ["How often did you need the sr agent to step in today, and why?", "short"],
         ["What is one thing you'll do differently tomorrow?", "short"],
+        ["Which senior agent supervised you today?", "single", SENIOR_AGENTS],
+        ["How effective was the senior agent's coaching while you drove today?", "scale"],
+        ["How well did the senior agent balance giving you room to try with stepping in when needed?", "long"],
       ]},
       { week: 3, label: "Day 15 — Drive with Guidance: Building Consistency", q: [
         ["Compared to yesterday, how much smoother did today feel?", "scale"],
@@ -701,6 +729,9 @@
         ["Where do you still most rely on senior-agent guidance?", "long"],
         ["How well did you balance quality and speed today?", "scale"],
         ["Heading into Week 4, what is your single biggest goal?", "short"],
+        ["Which senior agent supervised you today?", "single", SENIOR_AGENTS],
+        ["How consistent and dependable was the senior agent's guidance today?", "scale"],
+        ["What feedback from the senior agent helped you most in building consistency?", "long"],
       ]},
       { week: 4, label: "Day 16 — Observe: Filling the Gaps", q: [
         ["How confident do you feel across the full range of ticket types now?", "scale"],
@@ -708,6 +739,9 @@
         ["What did you observe today that closed a gap you knew you had?", "long"],
         ["How clear are you on the standards you'll be assessed against at graduation?", "scale"],
         ["What is one area you want the sr agent to focus your practice on this week?", "short"],
+        ["Which senior agent did you shadow today?", "single", SENIOR_AGENTS],
+        ["How well did the senior agent help you target the gaps you still need to close?", "scale"],
+        ["How clearly did the senior agent explain the standards you'll be assessed against at graduation?", "long"],
       ]},
       { week: 4, label: "Day 17 — Observe: Complex & Multi-step Resolutions", q: [
         ["How comfortable are you breaking a complex, multi-step ticket into steps?", "scale"],
@@ -715,6 +749,9 @@
         ["Which tool hand-off (e.g., Gorgias ↔ VeraCore ↔ Shopify) still feels error-prone?", "short"],
         ["How confident are you that you could complete any scenario/resolution unaided?", "scale"],
         ["What is one habit you've seen in senior agents that you want to adopt?", "short"],
+        ["Which senior agent did you shadow today?", "single", SENIOR_AGENTS],
+        ["How clearly did the senior agent break down complex, multi-step resolutions today?", "scale"],
+        ["What habit or technique did the senior agent demonstrate that you want to adopt?", "long"],
       ]},
       { week: 4, label: "Day 18 — Observe: Self-Assessment Before Driving", q: [
         ["Rate your overall readiness for graduation as of today.", "scale"],
@@ -722,6 +759,9 @@
         ["What is the one area you're most worried about for the assessment?", "short"],
         ["How confident are you working independently with minimal guidance?", "scale"],
         ["Onshore: What do you want to practice on calls tomorrow? Offshore: Which focus View do you want to drive tomorrow?", "short"],
+        ["Which senior agent did you shadow today?", "single", SENIOR_AGENTS],
+        ["How helpful was the senior agent in giving you an honest read on your graduation readiness?", "scale"],
+        ["What guidance did the senior agent give about the area you're most worried about?", "long"],
       ]},
       { week: 4, label: "Day 19 — Drive with Guidance: Final Practice", q: [
         ["How independent did you feel today vs. the start of Week 4?", "scale"],
@@ -729,6 +769,9 @@
         ["Where did you still need guidance today?", "long"],
         ["How ready do you feel for tomorrow's graduation assessment?", "scale"],
         ["What is the one thing you want to nail tomorrow?", "short"],
+        ["Which senior agent supervised you today?", "single", SENIOR_AGENTS],
+        ["How effectively did the senior agent prepare you for tomorrow's graduation assessment?", "scale"],
+        ["Where did the senior agent's guidance make the biggest difference today?", "long"],
       ]},
       { week: 4, label: "Day 20 — Graduation Day", q: [
         ["Looking back on the whole program, how confident do you feel starting on your own?", "scale"],
@@ -736,6 +779,9 @@
         ["What is the one skill you'd still like ongoing support on after graduation?", "short"],
         ["How prepared do you feel to handle a live queue independently going forward?", "scale"],
         ["Looking back across Weeks 2–4, what was the most valuable part of the shadow program — and what would you change?", "long"],
+        ["Which senior agent(s) did you work with most across the shadow program?", "multi", SENIOR_AGENTS],
+        ["Overall, how effective was your senior agent(s) in preparing you to work independently?", "scale"],
+        ["What is one thing your senior agent did especially well, and one thing that would improve shadowing for future trainees?", "long"],
       ]},
     ];
 
@@ -961,18 +1007,25 @@
       const id = s.id;
       if (type === "scale" || type === "scale_sr" || type === "scale_note") {
         const anchors = type === "scale_sr" ? QUAL_SR : QUAL;
-        const cells = anchors.map((a, i) => {
-          const v = i + 1, sel = answers[id] === v ? "sel" : "";
-          return `<div class="opt ${sel}" data-v="${v}"><span class="emo">${EMO[i]}</span><span class="n">${v}</span><span class="lab">${a}</span></div>`;
-        }).join("");
+        let cells = "";
+        for (let v = 1; v <= SCALE_MAX; v++) {
+          const sel = answers[id] === v ? "sel" : "";
+          cells += `<div class="opt ${sel}" data-v="${v}"><span class="n">${v}</span></div>`;
+        }
         let out = `<h2 class="q">${label} <span class="req">*</span></h2>
       <div class="scale" id="scale">${cells}</div>
-      <div class="anchor"><span>${anchors[0]}</span><span>${anchors[4]}</span></div>`;
+      <div class="anchor"><span>1 · ${anchors[0]}</span><span>${SCALE_MAX} · ${anchors[anchors.length - 1]}</span></div>`;
         if (type === "scale_note") {
           out += `<p class="notelab">${extra || "Add a note (optional)"}</p>
           <textarea id="note" class="note" placeholder="Optional note…">${answers[id + "_note"] || ""}</textarea>`;
         }
         return out;
+      }
+      if (type === "single") {
+        return `<h2 class="q">${label} <span class="req">*</span></h2>${chips(extra, id, false)}`;
+      }
+      if (type === "multi") {
+        return `<h2 class="q">${label} <span class="req">*</span></h2><p class="notelab">Select all that apply.</p>${chips(extra, id, true)}`;
       }
       if (type === "flag") {
         return `<h2 class="q">${label} <span class="req">*</span></h2>${chips(extra, id, false)}
@@ -1066,7 +1119,8 @@
       if (s.kind !== "q") return true;
       const type = s.q[1]; const v = answers[s.id];
       if (type === "long" || type === "short") return !!(v && String(v).trim());
-      return !!v; // scale / scale_sr / scale_note / flag -> require the rating/choice
+      if (type === "multi") return Array.isArray(v) && v.length > 0;
+      return !!v; // scale / scale_sr / scale_note / flag / single -> require the rating/choice
     }
     function updateNext() { const b = document.getElementById("nextb"); if (b) b.disabled = !isAnswered(steps[cur]); }
 
@@ -1096,8 +1150,9 @@
       if (!role) return;
       const s = steps[cur]; if (!s) return;
       if (e.key === "Enter" && document.activeElement.tagName !== "TEXTAREA") { const b = document.getElementById("nextb"); if (b && !b.disabled) { e.preventDefault(); next(); } }
-      if (s.kind === "q" && /scale/.test(s.q[1]) && /^[1-5]$/.test(e.key) && document.activeElement.tagName !== "TEXTAREA") {
-        const o = document.querySelector(`.opt[data-v="${e.key}"]`); if (o) o.click();
+      if (s.kind === "q" && /scale/.test(s.q[1]) && /^[0-9]$/.test(e.key) && document.activeElement.tagName !== "TEXTAREA") {
+        const val = e.key === "0" ? 10 : +e.key;
+        const o = document.querySelector(`.opt[data-v="${val}"]`); if (o) o.click();
       }
     });
 
