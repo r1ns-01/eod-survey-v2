@@ -74,6 +74,33 @@
       padding: 24px;
     }
 
+    /* ── blurred photo backdrop ─────────────────────────────────────────
+       Two fixed layers behind all content:
+         body::before  the photo, heavily blurred and dialled back
+         body::after   a warm cream veil so the form stays fully legible  */
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -40px;
+      /* bleed past the viewport so the blur has no soft edges */
+      pointer-events: none;
+    }
+
+    body::before {
+      background: url("assets/bg-lola.jpg") center / cover no-repeat;
+      filter: blur(16px) saturate(0.92);
+      transform: scale(1.06);
+      opacity: 0.55;
+      z-index: -2;
+    }
+
+    body::after {
+      background:
+        radial-gradient(1200px 700px at 50% 40%, rgba(253, 248, 239, .36), rgba(244, 237, 223, .50));
+      z-index: -1;
+    }
+
     /* cozy serif for headings */
     h1,
     h2,
