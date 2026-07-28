@@ -313,6 +313,31 @@
       margin-top: 22px
     }
 
+    /* display-only batching for the name picker: spacing + a quiet label,
+       the chips themselves (and their values) are unchanged */
+    .chipgroups {
+      margin-top: 22px
+    }
+
+    .chipgroup+.chipgroup {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px dashed var(--line)
+    }
+
+    .grouplab {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted)
+    }
+
+    .chipgroup .chips {
+      margin-top: 12px
+    }
+
     .chip {
       cursor: pointer;
       border: 2px solid var(--line);
@@ -614,6 +639,12 @@
     const MODE = ["Trainee observed", "Trainee drove (with supervision)"];
     /* name rosters — option pickers (mirrors v1); edit these lists to update the dropdowns */
     const TRAINEES = ["Aldrin", "Amirah", "Arron", "Jocef", "Mari", "Mark Anthony", "Mechelle", "PJ", "Annette", "Cristine", "Dominique", "EJ", "Jerome", "Jessie", "Kaye", "Laquan", "Lexie", "MJ", "Ro-Ann", "Vanessa"];
+    /* display-only grouping for the trainee picker. TRAINEES above stays the
+       source of truth for values; anyone missing here still renders, ungrouped. */
+    const TRAINEE_GROUPS = [
+      { label: "Batch 6A", names: ["Aldrin", "Amirah", "Arron", "Jocef", "Mari", "Mark Anthony", "Mechelle", "PJ"] },
+      { label: "Batch 6B", names: ["Annette", "Cristine", "Dominique", "EJ", "Jerome", "Jessie", "Kaye", "Laquan", "Lexie", "MJ", "Ro-Ann", "Vanessa"] }
+    ];
     const SENIOR_AGENTS = ["Adel", "Alvin", "Cel", "Claire", "Ely", "Fred", "Kennedy", "Madison", "Menjie", "Migz", "Nathan", "Reena", "Sherry", "Tina", "Marlon"];
     /* 1-5 scale anchors */
     const QUAL = ["Not at all", "A little", "Somewhat", "Mostly", "Completely"];
@@ -632,14 +663,14 @@
       return [
         { id: "date", label: "What's today's date?", type: "date", req: true, help: "Defaults to today — change it if you're logging an earlier day." },
         { id: "training_day", label: "Which training day is this?", type: "day", req: true, help: "Pick the day of your program (your start date may differ from the calendar week). This chooses today's questions." },
-        { id: "trainee_name", label: "Who's filling this out?", type: "single", options: TRAINEES, req: true, help: "Select your name." },
+        { id: "trainee_name", label: "Who's filling this out?", type: "single", options: TRAINEES, groups: TRAINEE_GROUPS, req: true, help: "Select your name." },
       ];
     }
     function metaSenior() {
       return [
         { id: "date", label: "What's today's date?", type: "date", req: true, help: "Defaults to today — change it if you're logging an earlier day." },
         { id: "training_day", label: "Which training day is this?", type: "day", req: true, help: "Pick the trainee's program day (shadow feedback runs Days 6–20). This chooses today's questions." },
-        { id: "trainee_name", label: "Which trainee are you reporting on?", type: "single", options: TRAINEES, req: true, help: "Select the trainee." },
+        { id: "trainee_name", label: "Which trainee are you reporting on?", type: "single", options: TRAINEES, groups: TRAINEE_GROUPS, req: true, help: "Select the trainee." },
         { id: "senior_agent_name", label: "Which senior agent are you (reporting in)?", type: "single", options: SENIOR_AGENTS, req: true, help: "Select your name." },
         { id: "mode", label: "What was the mode today?", type: "single", options: MODE, req: true },
       ];
@@ -1054,7 +1085,7 @@
       let inner = "";
       if (f.type === "date") inner = `<input type="date" id="f" value="${answers[f.id] || todayISO}"/>`;
       else if (f.type === "text") inner = `<input type="text" id="f" placeholder="Type a name…" value="${(answers[f.id] || "").replace(/"/g, '&quot;')}"/>`;
-      else if (f.type === "single") inner = chips(f.options, f.id, false);
+      else if (f.type === "single") inner = chips(f.options, f.id, false, f.groups);
       else if (f.type === "multi") inner = chips(f.options, f.id, true);
       else if (f.type === "day") {
         const sel = answers.training_day || defaultDay();
@@ -1103,12 +1134,26 @@
       }
     }
 
-    function chips(options, id, multi) {
+    function chips(options, id, multi, groups) {
       const val = answers[id] || (multi ? [] : null);
-      return `<div class="chips" data-id="${id}" data-multi="${multi}">` + options.map(o => {
+      const chip = o => {
         const on = multi ? val.includes(o) : val === o;
         return `<div class="chip ${on ? "sel" : ""}" data-v="${o.replace(/"/g, '&quot;')}"><span class="tick">✓</span>${o}</div>`;
-      }).join("") + `</div>`;
+      };
+      const box = items => `<div class="chips" data-id="${id}" data-multi="${multi}">` + items.map(chip).join("") + `</div>`;
+      if (groups && groups.length) {
+        const seen = [];
+        let out = "";
+        groups.forEach(g => {
+          const items = (g.names || []).filter(o => options.includes(o));
+          items.forEach(o => seen.push(o));
+          if (items.length) out += `<div class="chipgroup"><p class="grouplab">${g.label}</p>${box(items)}</div>`;
+        });
+        const rest = options.filter(o => !seen.includes(o)); // never drop a name
+        if (rest.length) out += `<div class="chipgroup">${box(rest)}</div>`;
+        return `<div class="chipgroups">${out}</div>`;
+      }
+      return box(options);
     }
 
     /* ---------------- bind ---------------- */
@@ -1136,7 +1181,7 @@
             if (i >= 0) answers[id].splice(i, 1); else answers[id].push(v);
             c.classList.toggle("sel");
           } else {
-            answers[id] = v; box.querySelectorAll(".chip").forEach(x => x.classList.remove("sel")); c.classList.add("sel");
+            answers[id] = v; view.querySelectorAll(`.chips[data-id="${id}"] .chip`).forEach(x => x.classList.remove("sel")); c.classList.add("sel");
             save(); updateNext();
             if (!isFlag && s.kind === "meta") { setTimeout(next, 220); return; } // meta single auto-advances
             return;
