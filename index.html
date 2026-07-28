@@ -339,6 +339,7 @@
     }
 
     .chip {
+      position: relative;
       cursor: pointer;
       border: 2px solid var(--line);
       background: var(--card);
@@ -349,7 +350,7 @@
       transition: .15s;
       display: inline-flex;
       align-items: center;
-      gap: 8px
+      justify-content: center
     }
 
     .chip:hover {
@@ -363,7 +364,17 @@
       color: #fff
     }
 
+    /* the tick is taken out of flow so it never offsets the label — the name
+       stays centred by the chip's own padding whether selected or not, and the
+       chip keeps the same width on select instead of growing */
     .chip .tick {
+      position: absolute;
+      left: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 11px;
+      line-height: 1;
+      pointer-events: none;
       opacity: 0;
       transition: .15s
     }
