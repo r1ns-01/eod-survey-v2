@@ -674,14 +674,14 @@
     function metaTrainee() {
       return [
         { id: "date", label: "What's today's date?", type: "date", req: true, help: "Defaults to today — change it if you're logging an earlier day." },
-        { id: "training_day", label: "Which training day is this?", type: "day", req: true, help: "Pick the day of your program (your start date may differ from the calendar week). This chooses today's questions." },
+        { id: "training_day", label: "Which training day is this?", type: "day", req: true, help: "Pick the day of your program. This chooses today's questions." },
         { id: "trainee_name", label: "Who's filling this out?", type: "single", options: TRAINEES, groups: TRAINEE_GROUPS, req: true, help: "Select your name." },
       ];
     }
     function metaSenior() {
       return [
         { id: "date", label: "What's today's date?", type: "date", req: true, help: "Defaults to today — change it if you're logging an earlier day." },
-        { id: "training_day", label: "Which training day is this?", type: "day", req: true, help: "Pick the trainee's program day (shadow feedback runs Days 6–20). This chooses today's questions." },
+        { id: "training_day", label: "Which training day is this?", type: "day", req: true, help: "Pick the trainee's program day (Days 6–20). This chooses today's questions." },
         { id: "trainee_name", label: "Which trainee are you reporting on?", type: "single", options: TRAINEES, groups: TRAINEE_GROUPS, req: true, help: "Select the trainee." },
         { id: "senior_agent_name", label: "Which senior agent are you (reporting in)?", type: "single", options: SENIOR_AGENTS, req: true, help: "Select your name." },
         { id: "mode", label: "What was the mode today?", type: "single", options: MODE, req: true },
@@ -739,7 +739,7 @@
         ["How quickly can you find the right macro now — can you hit the under-30-seconds target?", "scale"],
         ["How ready do you feel to take live tickets with a senior-agent buddy next week, and what is the one thing you most want support on?", "scale_note", "What do you most want support on?"],
       ]},
-      { week: 2, label: "Day 6 — Watch & Learn: Tools in Live Context", q: [
+      { week: 2, label: "Day 6 — Observation Only: Tools in Live Context", q: [
         ["How clearly could you follow the sr agent's reasoning as they worked tickets today?", "scale"],
         ["Which tool (Gorgias, VeraCore, Shopify, etc.) felt most unfamiliar when you saw it used live?", "short"],
         ["What is one decision the sr agent made that you would not have known to make on your own?", "long"],
@@ -749,7 +749,7 @@
         ["How clearly did the senior agent explain their reasoning while working tickets today?", "scale"],
         ["What is one thing about the senior agent's teaching style that helped you learn today?", "long"],
       ]},
-      { week: 2, label: "Day 7 — Watch & Learn: Order Management in Action", q: [
+      { week: 2, label: "Day 7 — Observation Only: Order Management in Action", q: [
         ["How well do you now understand the order lifecycle from placement to delivery?", "scale"],
         ["Describe one shipping or order-management scenario you saw today that surprised you.", "long"],
         ["Which step in handling an unassigned order ticket still feels fuzzy?", "short"],
@@ -759,7 +759,7 @@
         ["How efficiently did the senior agent move through their queue and order-management tasks today?", "scale"],
         ["What did the senior agent do that showed strong knowledge of order-management processes?", "long"],
       ]},
-      { week: 2, label: "Day 8 — Watch & Learn: Returns & Closing Tickets", q: [
+      { week: 2, label: "Day 8 — Live Tickets with Supervision: Returns & Closing Tickets", q: [
         ["How clear are you on when a ticket should be escalated vs. resolved directly?", "scale"],
         ["What did you learn today about setting the correct Contact Reason?", "long"],
         ["Which type of unassigned ticket do you feel least prepared to handle tomorrow when you start driving?", "short"],
@@ -769,7 +769,7 @@
         ["How well did the senior agent demonstrate the correct process for returns and closing tickets?", "scale"],
         ["How clearly did the senior agent explain when to escalate a ticket vs. resolve it directly?", "long"],
       ]},
-      { week: 2, label: "Day 9 — First Flight: Trainee Drives (with supervision)", q: [
+      { week: 2, label: "Day 9 — Live Tickets with Supervision: Building Confidence", q: [
         ["How did it feel to drive the session and share your screen today? (comfort)", "scale"],
         ["On how many tickets did you need the sr agent to step in or correct you, and on what?", "long"],
         ["What is one thing that was harder in practice than it looked when you were observing?", "long"],
@@ -779,7 +779,7 @@
         ["How helpful was the senior agent's guidance and feedback while you drove today?", "scale"],
         ["When the senior agent stepped in to correct you, how clearly did they explain the fix?", "long"],
       ]},
-      { week: 2, label: "Day 10 — Driving with Supervision: Full Queue Practice", q: [
+      { week: 2, label: "Day 10 — Full Queue Practice · Graduation Day (Offshore)", q: [
         ["Compared to yesterday, how much more independent did you feel today?", "scale"],
         ["Which type of unassigned ticket do you now feel most confident handling?", "short"],
         ["Which type still makes you want to double-check with a senior agent?", "short"],
@@ -789,7 +789,7 @@
         ["How much did the senior agent's support increase your confidence handling the queue today?", "scale"],
         ["What is one thing the senior agent could do differently to support you better?", "long"],
       ]},
-      { week: 3, label: "Day 11 — Observe: Broadening Ticket Types", q: [
+      { week: 3, label: "Day 11 — Call Listening Only: Broadening Ticket Types", q: [
         ["How confident are you that you've now seen the full range of common ticket types?", "scale"],
         ["Which Gorgias View did you spend the least time in during Week 2?", "short"],
         ["What did you observe today in a less-familiar ticket type that you want to remember?", "long"],
@@ -799,7 +799,7 @@
         ["How well did the senior agent help you understand less-common ticket types today?", "scale"],
         ["How did the senior agent's triage reasoning help you follow less-familiar tickets?", "long"],
       ]},
-      { week: 3, label: "Day 12 — Observe: Edge Cases & Exceptions", q: [
+      { week: 3, label: "Day 12 — Call Listening Only: Edge Cases & Exceptions", q: [
         ["How comfortable are you recognizing an edge case vs. a routine ticket?", "scale"],
         ["Describe one exception or unusual situation you watched the sr agent resolve today.", "long"],
         ["Which policy or SOP did you have to look up (or wish you had) today?", "short"],
@@ -809,29 +809,29 @@
         ["How clearly did the senior agent walk you through edge cases and exceptions today?", "scale"],
         ["How comfortable did the senior agent make it to ask questions about unusual situations?", "long"],
       ]},
-      { week: 3, label: "Day 13 — Observe: Tone, De-escalation & Quality", q: [
+      { week: 3, label: "Day 13 — Calls with Supervision: Tone, De-escalation & Quality", q: [
         ["How well do you feel you understand the brand's voice in customer replies?", "scale"],
         ["What did you learn today about de-escalating a frustrated customer?", "long"],
         ["Which part of writing a high-quality response feels hardest right now?", "short"],
         ["How confident are you handling a difficult customer on your own?", "scale"],
-        ["Onshore: how ready do you feel to take phone calls tomorrow? Offshore: which Gorgias View do you most want to focus on tomorrow?", "scale_note", "Name the View (offshore) or any note"],
+        ["How ready do you feel about taking incoming calls with supervision?", "scale_note", "What do you most want support on?"],
         ["Which senior agent did you shadow today?", "single", SENIOR_AGENTS],
         ["How well did the senior agent model the brand's tone and de-escalation skills today?", "scale"],
         ["What did you learn from the senior agent about de-escalating a frustrated customer?", "long"],
       ]},
-      { week: 3, label: "Day 14 — Drive with Guidance (Onshore: phones / Offshore: low-exposure Views)", q: [
-        ["Onshore: How comfortable were you taking calls today? Offshore: How comfortable were you in the Gorgias View(s) you focused on?", "scale"],
+      { week: 3, label: "Day 14 — Calls with Supervision: Taking Incoming Calls", q: [
+        ["How comfortable were you taking incoming calls today?", "scale"],
         ["What was the hardest moment of the day, and how did you handle it?", "long"],
-        ["Onshore: What part of a live call still feels unnatural? Offshore: Which ticket type in your focus View still confuses you?", "long"],
+        ["What part of a live call still feels unnatural?", "long"],
         ["How often did you need the sr agent to step in today, and why?", "short"],
         ["What is one thing you'll do differently tomorrow?", "short"],
         ["Which senior agent supervised you today?", "single", SENIOR_AGENTS],
         ["How effective was the senior agent's coaching while you drove today?", "scale"],
         ["How well did the senior agent balance giving you room to try with stepping in when needed?", "long"],
       ]},
-      { week: 3, label: "Day 15 — Drive with Guidance: Building Consistency", q: [
+      { week: 3, label: "Day 15 — Calls with Supervision: Building Consistency", q: [
         ["Compared to yesterday, how much smoother did today feel?", "scale"],
-        ["Onshore: What's one call type you now feel solid on? Offshore: Which previously-unfamiliar View do you now feel solid on?", "short"],
+        ["What's one call type you now feel solid on?", "short"],
         ["Where do you still most rely on senior-agent guidance?", "long"],
         ["How well did you balance quality and speed today?", "scale"],
         ["Heading into Week 4, what is your single biggest goal?", "short"],
@@ -839,7 +839,7 @@
         ["How consistent and dependable was the senior agent's guidance today?", "scale"],
         ["What feedback from the senior agent helped you most in building consistency?", "long"],
       ]},
-      { week: 4, label: "Day 16 — Observe: Filling the Gaps", q: [
+      { week: 4, label: "Day 16 — Coworking Mode: Filling the Gaps", q: [
         ["How confident do you feel across the full range of ticket types now?", "scale"],
         ["Which Gorgias View or call type have you still spent the least time on?", "short"],
         ["What did you observe today that closed a gap you knew you had?", "long"],
@@ -849,7 +849,7 @@
         ["How well did the senior agent help you target the gaps you still need to close?", "scale"],
         ["How clearly did the senior agent explain the standards you'll be assessed against at graduation?", "long"],
       ]},
-      { week: 4, label: "Day 17 — Observe: Complex & Multi-step Resolutions", q: [
+      { week: 4, label: "Day 17 — Coworking Mode: Complex & Multi-step Resolutions", q: [
         ["How comfortable are you breaking a complex, multi-step ticket into steps?", "scale"],
         ["Describe a multi-step resolution you watched today.", "long"],
         ["Which tool hand-off (e.g., Gorgias ↔ VeraCore ↔ Shopify) still feels error-prone?", "short"],
@@ -859,19 +859,19 @@
         ["How clearly did the senior agent break down complex, multi-step resolutions today?", "scale"],
         ["What habit or technique did the senior agent demonstrate that you want to adopt?", "long"],
       ]},
-      { week: 4, label: "Day 18 — Observe: Self-Assessment Before Driving", q: [
+      { week: 4, label: "Day 18 — Coworking Mode: Self-Assessment", q: [
         ["Rate your overall readiness for graduation as of today.", "scale"],
         ["What are your two strongest areas right now?", "short"],
         ["What is the one area you're most worried about for the assessment?", "short"],
         ["How confident are you working independently with minimal guidance?", "scale"],
-        ["Onshore: What do you want to practice on calls tomorrow? Offshore: Which focus View do you want to drive tomorrow?", "short"],
+        ["What do you want to practice on calls tomorrow?", "short"],
         ["Which senior agent did you shadow today?", "single", SENIOR_AGENTS],
         ["How helpful was the senior agent in giving you an honest read on your graduation readiness?", "scale"],
         ["What guidance did the senior agent give about the area you're most worried about?", "long"],
       ]},
-      { week: 4, label: "Day 19 — Drive with Guidance: Final Practice", q: [
+      { week: 4, label: "Day 19 — Coworking Mode: Final Practice", q: [
         ["How independent did you feel today vs. the start of Week 4?", "scale"],
-        ["Onshore: Which call type are you most confident taking solo? Offshore: Which previously-low-exposure View are you most confident in now?", "short"],
+        ["Which call type are you most confident taking solo?", "short"],
         ["Where did you still need guidance today?", "long"],
         ["How ready do you feel for tomorrow's graduation assessment?", "scale"],
         ["What is the one thing you want to nail tomorrow?", "short"],
@@ -879,7 +879,7 @@
         ["How effectively did the senior agent prepare you for tomorrow's graduation assessment?", "scale"],
         ["Where did the senior agent's guidance make the biggest difference today?", "long"],
       ]},
-      { week: 4, label: "Day 20 — Graduation Day", q: [
+      { week: 4, label: "Day 20 — Graduation Day (Onshore)", q: [
         ["Looking back on the whole program, how confident do you feel starting on your own?", "scale"],
         ["What part of the training experience did you enjoy or value the most?", "long"],
         ["What is the one skill you'd still like ongoing support on after graduation?", "short"],
@@ -893,105 +893,105 @@
 
     /* Senior shadow feedback runs Weeks 2-4 only (Days 6-20). Keyed by day #. */
     const SENIOR_DAYS = {
-      6: { week: 2, label: "Day 6 — Observe: Tools in Live Context", q: [
+      6: { week: 2, label: "Day 6 — Observation Only: Tools in Live Context", q: [
         ["How engaged and attentive was the trainee while observing today?", "scale_sr"],
         ["What questions did the trainee ask, and what did they reveal about their understanding?", "long"],
         ["(Mirrors trainee self-rating) How well does the trainee actually understand where unassigned tickets come from and how they're picked up?", "scale_sr"],
         ["Which tool or concept clearly landed, and which one will need reinforcement?", "short"],
         ["What is the one thing you want to focus on with this trainee tomorrow?", "short"],
       ]},
-      7: { week: 2, label: "Day 7 — Observe: Order Management in Action", q: [
+      7: { week: 2, label: "Day 7 — Observation Only: Order Management in Action", q: [
         ["How well did the trainee follow your reasoning as you worked order/shipping tickets?", "scale_sr"],
         ["Describe a moment today where the trainee connected the dots (or got lost).", "long"],
         ["(Mirrors trainee self-rating) How confident are you the trainee could locate an order and read its status with minimal help?", "scale_sr"],
         ["What order-management concept is still fuzzy for them?", "short"],
         ["What is the one thing you want to focus on tomorrow?", "short"],
       ]},
-      8: { week: 2, label: "Day 8 — Observe: Returns & Closing Tickets", q: [
+      8: { week: 2, label: "Day 8 — Live Tickets with Supervision: Returns & Closing Tickets", q: [
         ["How well does the trainee grasp when to escalate vs. resolve directly?", "scale_sr"],
         ["Give an example from today of their judgment on Contact Reasons or closing tickets.", "long"],
         ["How ready is this trainee to take the keyboard tomorrow?", "scale_sr"],
         ["What specific risk are you watching for when they start driving (e.g., refunds, wrong-order edits, missing Contact Reason)?", "long"],
         ["Readiness flag for driving:", "flag", FLAG3],
       ]},
-      9: { week: 2, label: "Day 9 — Drive (with supervision): First Live Tickets", q: [
+      9: { week: 2, label: "Day 9 — Live Tickets with Supervision: Building Confidence", q: [
         ["How did the trainee handle driving and sharing their screen today?", "scale_sr"],
         ["On which specific tickets did you step in or correct them, and why?", "long"],
         ["(Mirrors trainee self-rating) How accurately is the trainee setting Contact Reasons on their own?", "scale_sr"],
         ["What did they do well that you want to reinforce tomorrow?", "long"],
         ["What is the single skill they most need to improve before tomorrow?", "short"],
       ]},
-      10: { week: 2, label: "Day 10 — Drive (with supervision): Full Queue Practice", q: [
+      10: { week: 2, label: "Day 10 — Full Queue Practice · Graduation Day (Offshore)", q: [
         ["Compared to yesterday, how much more independent was the trainee today?", "scale_sr"],
         ["Which unassigned-ticket types are they now handling reliably, and which still need you?", "long"],
         ["How well did they manage handling time / queue pace?", "scale_sr"],
         ["What is the most important thing for them to work on in Week 3?", "short"],
         ["End-of-Week 2 verdict:", "flag", FLAG3_RISK],
       ]},
-      11: { week: 3, label: "Day 11 — Observe: Broadening Ticket Types", q: [
+      11: { week: 3, label: "Day 11 — Call Listening Only: Broadening Ticket Types", q: [
         ["How well is the trainee recognizing less-common ticket types as you work them?", "scale_sr"],
         ["Which Gorgias View / ticket type does this trainee clearly have the least exposure to?", "short"],
         ["What did they ask about today that showed growth since Week 2?", "long"],
         ["Where do you most want to broaden their exposure this week?", "short"],
         ["One specific thing to focus on tomorrow.", "short"],
       ]},
-      12: { week: 3, label: "Day 12 — Observe: Edge Cases & Exceptions", q: [
+      12: { week: 3, label: "Day 12 — Call Listening Only: Edge Cases & Exceptions", q: [
         ["How comfortable is the trainee distinguishing an edge case from a routine ticket?", "scale_sr"],
         ["Describe an exception you worked today and how the trainee responded to it.", "long"],
         ["How well does the trainee know where to find the right SOP quickly?", "scale_sr"],
         ["What policy or judgment gap did today surface?", "short"],
         ["One thing to focus on tomorrow.", "short"],
       ]},
-      13: { week: 3, label: "Day 13 — Observe: Tone, De-escalation & Quality", q: [
+      13: { week: 3, label: "Day 13 — Calls with Supervision: Tone, De-escalation & Quality", q: [
         ["How well does the trainee understand the brand's voice and tone?", "scale_sr"],
         ["What did you model today on de-escalation, and did the trainee seem to absorb it?", "long"],
-        ["How ready is the trainee to drive tomorrow — onshore on phones, or offshore in their low-exposure Views?", "scale_sr"],
-        ["For offshore trainees: which least-used Gorgias View should they focus on tomorrow, and why?", "short"],
+        ["How ready is the trainee to take incoming calls with supervision?", "scale_sr"],
+        ["Which call type should they focus on next, and why?", "short"],
         ["Readiness flag for driving:", "flag", FLAG3],
       ]},
-      14: { week: 3, label: "Day 14 — Drive with Guidance (Onshore: phones / Offshore: low-exposure Views)", q: [
-        ["Onshore: How did the trainee handle live calls today? Offshore: How did they handle tickets in their focus View(s)?", "scale_sr"],
+      14: { week: 3, label: "Day 14 — Calls with Supervision: Taking Incoming Calls", q: [
+        ["How did the trainee handle incoming calls today?", "scale_sr"],
         ["What was the hardest moment for them, and how did they work through it?", "long"],
         ["On which calls/tickets did you need to step in, and why?", "long"],
         ["(Mirrors trainee self-rating) How would you rate their balance of quality and pace today?", "scale_sr"],
         ["One thing for them to do differently tomorrow.", "short"],
       ]},
-      15: { week: 3, label: "Day 15 — Drive with Guidance: Building Consistency", q: [
+      15: { week: 3, label: "Day 15 — Calls with Supervision: Building Consistency", q: [
         ["How much smoother was the trainee today vs. yesterday?", "scale_sr"],
-        ["Onshore: which call type are they now solid on? Offshore: which previously-unfamiliar View are they now solid on?", "short"],
+        ["Which call type are they now solid on?", "short"],
         ["Where do they still rely on your guidance most?", "long"],
         ["What is the priority focus for Week 4?", "short"],
         ["End-of-Week 3 verdict:", "flag", FLAG3_RISK],
       ]},
-      16: { week: 4, label: "Day 16 — Observe: Filling the Gaps", q: [
+      16: { week: 4, label: "Day 16 — Coworking Mode: Filling the Gaps", q: [
         ["How complete is the trainee's coverage across ticket types now?", "scale_sr"],
         ["Which Gorgias View or call type does the trainee still have the least exposure to?", "short"],
         ["What gap did today's observation help close?", "long"],
         ["What do you most want to drill with them this week before graduation?", "short"],
         ["One thing to focus on tomorrow.", "short"],
       ]},
-      17: { week: 4, label: "Day 17 — Observe: Complex & Multi-step Resolutions", q: [
+      17: { week: 4, label: "Day 17 — Coworking Mode: Complex & Multi-step Resolutions", q: [
         ["How well does the trainee follow a complex, multi-step resolution?", "scale_sr"],
         ["Describe a multi-step case you worked today and how the trainee tracked it.", "long"],
         ["Which tool hand-off (Gorgias ↔ VeraCore ↔ Shopify) still looks error-prone for them? (confidence they could do it unaided)", "scale_sr"],
         ["What habit do you want them to adopt from how you handled today's tickets?", "short"],
         ["One thing to focus on tomorrow.", "short"],
       ]},
-      18: { week: 4, label: "Day 18 — Observe: Self-Assessment Before Driving", q: [
+      18: { week: 4, label: "Day 18 — Coworking Mode: Self-Assessment", q: [
         ["How accurate is the trainee's own read on their readiness vs. your assessment?", "scale_sr"],
         ["What are this trainee's two clearest strengths heading into graduation?", "short"],
         ["What is the one area you're most concerned about for the assessment?", "short"],
         ["How independent are they with minimal guidance?", "scale_sr"],
         ["Readiness flag for graduation:", "flag", FLAG3],
       ]},
-      19: { week: 4, label: "Day 19 — Drive with Guidance: Final Practice", q: [
+      19: { week: 4, label: "Day 19 — Coworking Mode: Final Practice", q: [
         ["How independent was the trainee today vs. the start of Week 4?", "scale_sr"],
-        ["Onshore: which call type are they ready to take solo? Offshore: which previously-low-exposure View are they now confident in?", "short"],
+        ["Which call type are they ready to take solo?", "short"],
         ["Where did they still need guidance today?", "long"],
         ["How ready are they for tomorrow's graduation assessment?", "scale_sr"],
         ["What is the one thing you'll be watching for at graduation?", "short"],
       ]},
-      20: { week: 4, label: "Day 20 — Graduation Day", q: [
+      20: { week: 4, label: "Day 20 — Graduation Day (Onshore)", q: [
         ["How did the trainee perform in the graduation assessment overall?", "scale_sr"],
         ["What part of the program showed the most growth for this trainee?", "long"],
         ["What is the one skill they'll need ongoing support on after graduation?", "short"],
